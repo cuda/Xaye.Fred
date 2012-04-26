@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <version>2012.4.26.58</version>
+    <authors>Marcus Cuda</authors>
+    <owners>cuda</owners>
+    <licenseUrl>https://github.com/cuda/Xaye.Fred/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/cuda/Xaye.Fred</projectUrl>
+    <id>Xaye.Fred</id>
+    <title>Xaye.Fred</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>.NET wrapper around the Federal Reserve Economic Data (FRED) API</description>
+    <tags>data economics</tags>
+  </metadata>
+  <files>
+    <file src="Xaye.Fred\bin\Release\Xaye.Fred.dll" target="lib\net40\Xaye.Fred.dll" />
+  </files>
+</package>

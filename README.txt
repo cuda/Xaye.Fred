@@ -1,5 +1,7 @@
 Xaye.Fred is a simple .NET wrapper around the Federal Reserve Economic Data (FRED) API. The library is part of the Xaye project, but doesn't depend on any other parts of Xaye (or any other library). It is licensed under the permissive Simplified BSD license. 
 
+Available via NuGet: https://nuget.org/packages/Xaye.Fred
+
 Note: A asynchronous version of the library will be released shortly after the .NET 4.5 is release.
 
 To use the library, you must have a FRED API key. A key can be obtained from http://research.stlouisfed.org/useraccount/apikey
