@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Xaye.Fred
 {
@@ -11,7 +13,7 @@ namespace Xaye.Fred
         private IEnumerable<Category> _childern;
         private Category _parent;
         private IEnumerable<Category> _related;
-        private IEnumerable<Series> _series;
+        private List<Series> _series;
 
         internal Category(Fred fred) : base(fred)
         {
@@ -101,7 +103,17 @@ namespace Xaye.Fred
                 {
                     if (_series == null)
                     {
-                        _series = Fred.GetCategorySeries(Id);
+                        const int limit = 1000;
+                        _series = (List<Series>)Fred.GetCategorySeries(Id, DateTime.Now, DateTime.Now, limit, 0);
+                        var count = _series.Count();
+                        var call = 1;
+                        while (count == limit)
+                        {
+                            var more = (List<Series>)Fred.GetCategorySeries(Id, DateTime.Now, DateTime.Now, limit, call * limit);
+                            _series.AddRange(more);
+                            count = more.Count();
+                            call++;
+                        }
                     }
                 }
 

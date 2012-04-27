@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Xaye.Fred
 {
@@ -26,7 +27,7 @@ namespace Xaye.Fred
 
         private readonly object _lok = new object();
 
-        private IEnumerable<Series> _series;
+        private List<Series> _series;
 
         internal Release(Fred fred) : base(fred)
         {
@@ -74,7 +75,17 @@ namespace Xaye.Fred
                 {
                     if (_series == null)
                     {
-                        _series = Fred.GetReleaseSeries(Id);
+                        const int limit = 1000;
+                        _series = (List<Series>)Fred.GetReleaseSeries(Id, RealtimeStart, RealtimeEnd, limit, 0);
+                        var count = _series.Count();
+                        var call = 1;
+                        while (count == limit)
+                        {
+                            var more = (List<Series>)Fred.GetReleaseSeries(Id, DateTime.Now, DateTime.Now, limit, call * limit);
+                            _series.AddRange(more);
+                            count = more.Count();
+                            call++;
+                        }
                     }
                 }
 

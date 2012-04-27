@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Xaye.Fred
 {
@@ -75,7 +76,7 @@ namespace Xaye.Fred
         private readonly object _lok = new object();
         private IEnumerable<Category> _categories;
         private Release _release;
-        private IEnumerable<Observation> _data;
+        private List<Observation> _data;
 
         internal Series(Fred fred) : base(fred)
         {
@@ -167,7 +168,7 @@ namespace Xaye.Fred
                 {
                     if (_categories == null)
                     {
-                        _categories = Fred.GetSeriesCategories(Id);
+                        _categories = Fred.GetSeriesCategories(Id, RealtimeStart, RealtimeEnd);
                     }
                 }
                 return _categories;
@@ -186,7 +187,17 @@ namespace Xaye.Fred
                 {
                     if (_data == null)
                     {
-                        _data = Fred.GetSeriesObservations(Id);
+                        const int limit = 100000;
+                        _data = (List<Observation>)Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, RealtimeStart, RealtimeEnd, Enumerable.Empty<DateTime>(), limit, 0);
+                        var count = _data.Count();
+                        var call = 1;
+                        while (count == limit)
+                        {
+                            var more = (List<Observation>)Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, RealtimeStart, RealtimeEnd, Enumerable.Empty<DateTime>(), limit, call * limit);
+                            _data.AddRange(more);
+                            count = more.Count();
+                            call++;
+                        }
                     }
                 }
 

@@ -756,14 +756,22 @@ namespace Xaye.Fred
                                     Extensions.ToString(transformation), Extensions.ToString(frequency),
                                     Extensions.ToString(method), Extensions.ToString(outputType), "xml", vintageString);
 
-
             return GetRoot(url).Elements("observation").Select(
                 element =>
                     {
                         var valElm = element.Attribute("value");
-                        var value = valElm != null && !string.IsNullOrWhiteSpace(valElm.Value)
-                                        ? new double?(double.Parse(valElm.Value))
-                                        : null;
+                        double? value = null;
+                        if (valElm != null && !string.IsNullOrWhiteSpace(valElm.Value))
+                        {
+                            double dOut;
+                            var success = double.TryParse(valElm.Value, out dOut);
+                            if (success)
+                            {
+                                value = dOut;
+                            }
+
+                        }
+
                         return new Observation
                                    {
                                        RealtimeStart = element.Attribute("realtime_start").Value.ToFredDate(),
