@@ -13,26 +13,26 @@ var fred = new Fred("api key");
 The Fred object methods map directly to the FRED Web API call. 
 
 Calls using the FRED API default values:
-	IEnumerable<Release> GetReleases() -> http://api.stlouisfed.org/fred/releases
-	Release GetRelease(int releaseId) -> http://api.stlouisfed.org/fred/release?release_id=releaseId
-	IEnumerable<ReleaseDate> GetReleasesDates() -> http://api.stlouisfed.org/fred/releases/dates
-	IEnumerable<ReleaseDate> GetReleaseDates(int releaseId) -> http://api.stlouisfed.org/fred/release/dates?release_id=int releaseId
-	IEnumerable<Series> GetReleaseSeries(int releaseId) -> http://api.stlouisfed.org/fred/release/series?release_id=releaseId
-	IEnumerable<Source> GetReleaseSources(int releaseId) -> http://api.stlouisfed.org/fred/release/sources?release_id=releaseId
-	Category GetCategory(int category) -> http://api.stlouisfed.org/fred/category?category_id=category
-	IEnumerable<Category> GetCategoryRelated(int categoryId) -> http://api.stlouisfed.org/fred/category/related?category_id=categoryId
-	IEnumerable<Category> GetCategoryChildern(int categoryId) -> http://api.stlouisfed.org/fred/category/children?category_id=categoryId
-	IEnumerable<Series> GetCategorySeries(int categoryId) -> http://api.stlouisfed.org/fred/category/series?category_id=categoryId
-	Series GetSeries(string seriesId) -> http://api.stlouisfed.org/fred/category/series?category_id=categoryId
-	IEnumerable<Category> GetSeriesCategories(string seriesId) -> http://api.stlouisfed.org/fred/series/categories?series_id=seriesId
-	Release GetSeriesRelease(string seriesId) -> http://api.stlouisfed.org/fred/series/release?series_id=seriesId
-	IEnumerable<Series> GetSeriesSearch(string searchText) -> http://api.stlouisfed.org/fred/series/search?search_text=searchText	
-	IEnumerable<Series> GetSeriesUpdates() -> http://api.stlouisfed.org/fred/series/updates
-	IEnumerable<DateTime> GetSeriesVintageDates(string seriesId) -> http://api.stlouisfed.org/fred/series/vintagedates?series_id=seriesId
-	IEnumerable<Observation> GetSeriesObservations(string seriesId) -> http://api.stlouisfed.org/fred/series/observations?series_id=seriesId
-	IEnumerable<Source> GetSources() -> http://api.stlouisfed.org/fred/sources
-	Source GetSource(int sourceId) -> http://api.stlouisfed.org/fred/source?source_id=sourceId
-	IEnumerable<Release> GetSourceReleases(int sourceId) -> http://api.stlouisfed.org/fred/source/releases?source_id=sourceId
+	IEnumerable<Release> GetReleases() -> http://api.stlouisfed.org/docs/fred/releases.html
+	Release GetRelease(int releaseId) -> http://api.stlouisfed.org/docs/fred/release.html
+	IEnumerable<ReleaseDate> GetReleasesDates() -> http://api.stlouisfed.org/docs/fred/releases_dates.html
+	IEnumerable<ReleaseDate> GetReleaseDates(int releaseId) -> http://api.stlouisfed.org/docs/fred/release_dates.html
+	IEnumerable<Series> GetReleaseSeries(int releaseId) -> http://api.stlouisfed.org/docs/fred/release_series.html
+	IEnumerable<Source> GetReleaseSources(int releaseId) -> http://api.stlouisfed.org/docs/fred/release_sources.html
+	Category GetCategory(int category) -> http://api.stlouisfed.org/docs/fred/category.html
+	IEnumerable<Category> GetCategoryRelated(int categoryId) -> http://api.stlouisfed.org/docs/fred/category_related.html
+	IEnumerable<Category> GetCategoryChildern(int categoryId) -> http://api.stlouisfed.org/docs/fred/category_children.html
+	IEnumerable<Series> GetCategorySeries(int categoryId) -> http://api.stlouisfed.org/docs/fred/category_series.html
+	Series GetSeries(string seriesId) -> http://api.stlouisfed.org/docs/fred/series.html
+	IEnumerable<Category> GetSeriesCategories(string seriesId) -> http://api.stlouisfed.org/docs/fred/series_categories.html
+	Release GetSeriesRelease(string seriesId) -> http://api.stlouisfed.org/docs/fred/release.html
+	IEnumerable<Series> GetSeriesSearch(string searchText) -> http://api.stlouisfed.org/docs/fred/series_search.html
+	IEnumerable<Series> GetSeriesUpdates() -> http://api.stlouisfed.org/docs/fred/series_updates.html
+	IEnumerable<DateTime> GetSeriesVintageDates(string seriesId) -> http://api.stlouisfed.org/docs/fred/series_vintagedates.html
+	IEnumerable<Observation> GetSeriesObservations(string seriesId) -> http://api.stlouisfed.org/docs/fred/series_observations.html
+	IEnumerable<Source> GetSources() -> http://api.stlouisfed.org/docs/fred/sources.html
+	Source GetSource(int sourceId) -> http://api.stlouisfed.org/docs/fred/source.html
+	IEnumerable<Release> GetSourceReleases(int sourceId) -> http://api.stlouisfed.org/docs/fred/source_releases.html
 
 Overloaded versions are provided so user's can override FRED's default values. 
 
