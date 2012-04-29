@@ -7,6 +7,8 @@ namespace Xaye.Fred.Tests
     [TestFixture]
     public class Tests
     {
+        private static readonly string RealtimeNow = "&realtime_start=" + DateTime.Now.ToFredDateString() + "&realtime_end=" + DateTime.Now.ToFredDateString();
+
         [Test]
         public void CanGetACategory()
         {
@@ -42,8 +44,8 @@ namespace Xaye.Fred.Tests
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var categories = fred.GetCategoryChildern(1);
-            const string expectedUrl =
-                "http://api.stlouisfed.org/fred/category/children?api_key=key&category_id=1&realtime_start=2012-04-26&realtime_end=2012-04-26";
+            string expectedUrl =
+                "http://api.stlouisfed.org/fred/category/children?api_key=key&category_id=1" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(9, categories.Count());
         }
@@ -64,8 +66,8 @@ namespace Xaye.Fred.Tests
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var categories = fred.GetCategoryRelated(32073);
-            const string expectedUrl =
-                "http://api.stlouisfed.org/fred/category/related?api_key=key&category_id=32073&realtime_start=2012-04-26&realtime_end=2012-04-26";
+            var expectedUrl =
+                "http://api.stlouisfed.org/fred/category/related?api_key=key&category_id=32073" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(7, categories.Count());
         }
@@ -81,7 +83,7 @@ namespace Xaye.Fred.Tests
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var series = fred.GetCategorySeries(1);
-            const string expectedUrl ="http://api.stlouisfed.org/fred/category/series?api_key=key&category_id=1&realtime_start=2012-04-26&realtime_end=2012-04-26&limit=1000&offset=0&order_by=series_id&sort_order=asc&filter_variable=&filter_value=";
+            var expectedUrl ="http://api.stlouisfed.org/fred/category/series?api_key=key&category_id=1" + RealtimeNow + "&limit=1000&offset=0&order_by=series_id&sort_order=asc&filter_variable=&filter_value=";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(2, series.Count());
         }
@@ -112,7 +114,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var releases = fred.GetReleases();
-            const string expectedUrl = "http://api.stlouisfed.org/fred/releases?api_key=key&realtime_start=2012-04-26&realtime_end=2012-04-26&limit=1000&offset=0&order_by=release_id&sort_order=asc";
+            var expectedUrl = "http://api.stlouisfed.org/fred/releases?api_key=key" + RealtimeNow + "&limit=1000&offset=0&order_by=release_id&sort_order=asc";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(14, releases.Count());
         }
@@ -127,7 +129,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var dates = fred.GetReleasesDates();
-            const string expectedUrl = "http://api.stlouisfed.org/fred/releases/dates?api_key=key&realtime_start=2012-04-26&realtime_end=2012-04-26&limit=1000&offset=0&order_by=release_id&sort_order=asc&include_release_dates_with_no_data=false";
+            var expectedUrl = "http://api.stlouisfed.org/fred/releases/dates?api_key=key" + RealtimeNow + "&limit=1000&offset=0&order_by=release_id&sort_order=asc&include_release_dates_with_no_data=false";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(1, dates.Count());
         }
@@ -142,7 +144,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var release = fred.GetRelease(10);
-            const string expectedUrl = "http://api.stlouisfed.org/fred/release?api_key=key&release_id=10&realtime_start=2012-04-26&realtime_end=2012-04-26";
+            var expectedUrl = "http://api.stlouisfed.org/fred/release?api_key=key&release_id=10" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(10, release.Id);
             Assert.AreEqual("Consumer Price Index", release.Name);
@@ -170,7 +172,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var dates = fred.GetReleaseDates(10);
-            const string expectedUrl = "http://api.stlouisfed.org/fred/release/dates?api_key=key&release_id=10&realtime_start=1776-07-04&realtime_end=2012-04-26&limit=1000&offset=0&sort_order=asc&include_release_dates_with_no_data=false";
+            string expectedUrl = "http://api.stlouisfed.org/fred/release/dates?api_key=key&release_id=10&realtime_start=1776-07-04&realtime_end=" + DateTime.Now.ToFredDateString() + "&limit=1000&offset=0&sort_order=asc&include_release_dates_with_no_data=false";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(8, dates.Count());
         }
@@ -189,7 +191,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var series = fred.GetReleaseSeries(10);
-            const string expectedUrl = "http://api.stlouisfed.org/fred/release/series?api_key=key&release_id=10&realtime_start=2012-04-26&realtime_end=2012-04-26&limit=1000&offset=0&order_by=series_id&sort_order=asc&filter_variable=&filter_value=";
+            var expectedUrl = "http://api.stlouisfed.org/fred/release/series?api_key=key&release_id=10" + RealtimeNow + "&limit=1000&offset=0&order_by=series_id&sort_order=asc&filter_variable=&filter_value=";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(5, series.Count());
         }
@@ -204,7 +206,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var sources = fred.GetReleaseSources(10);
-            const string expectedUrl = "http://api.stlouisfed.org/fred/release/sources?api_key=key&release_id=10&realtime_start=2012-04-26&realtime_end=2012-04-26";
+            var expectedUrl = "http://api.stlouisfed.org/fred/release/sources?api_key=key&release_id=10" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(1, sources.Count());
         }
@@ -220,7 +222,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var series = fred.GetSeries("CPIAUCNS");
-            const string expectedUrl = "http://api.stlouisfed.org/fred/series?api_key=key&series_id=CPIAUCNS&realtime_start=2012-04-26&realtime_end=2012-04-26";
+            var expectedUrl = "http://api.stlouisfed.org/fred/series?api_key=key&series_id=CPIAUCNS" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual("CPIAUCNS", series.Id);
             Assert.AreEqual("Consumer Price Index for All Urban Consumers: All Items", series.Title);
@@ -247,8 +249,8 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var categories = fred.GetSeriesCategories("EXJPUS");
-            const string expectedUrl =
-                "http://api.stlouisfed.org/fred/series/categories?api_key=key&series_id=EXJPUS&realtime_start=2012-04-26&realtime_end=2012-04-26";
+            var expectedUrl =
+                "http://api.stlouisfed.org/fred/series/categories?api_key=key&series_id=EXJPUS" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(2, categories.Count());
         }
@@ -263,7 +265,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var release = fred.GetSeriesRelease("EXJPUS");
-            const string expectedUrl = "http://api.stlouisfed.org/fred/series/release?api_key=key&series_id=EXJPUS&realtime_start=2012-04-26&realtime_end=2012-04-26";
+            var expectedUrl = "http://api.stlouisfed.org/fred/series/release?api_key=key&series_id=EXJPUS" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(15, release.Id);
             Assert.AreEqual("G.5 Foreign Exchange Rates", release.Name);
@@ -286,7 +288,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var series = fred.GetSeriesSearch("money stock");
-            const string expectedUrl = "http://api.stlouisfed.org/fred/series/search?api_key=key&realtime_start=2012-04-26&realtime_end=2012-04-26&limit=1000&offset=0&order_by=search_rank&sort_order=asc&filter_variable=&filter_value=&search_type=full_text&search_text=money%20stock";
+            var expectedUrl = "http://api.stlouisfed.org/fred/series/search?api_key=key" + RealtimeNow + "&limit=1000&offset=0&order_by=search_rank&sort_order=asc&filter_variable=&filter_value=&search_type=full_text&search_text=money%20stock";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(3, series.Count());
         }
@@ -305,7 +307,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var series = fred.GetSeriesUpdates();
-            const string expectedUrl = "http://api.stlouisfed.org/fred/series/updates?api_key=key&realtime_start=2012-04-26&realtime_end=2012-04-26&limit=100&offset=0&filter_value=all";
+            var expectedUrl = "http://api.stlouisfed.org/fred/series/updates?api_key=key" + RealtimeNow + "&limit=100&offset=0&filter_value=all";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(3, series.Count());
         }
@@ -347,7 +349,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var sources = fred.GetSources();
-            const string expectedUrl = "http://api.stlouisfed.org/fred/sources?api_key=key&realtime_start=2012-04-26&realtime_end=2012-04-26&limit=1000&offset=0&order_by=source_id&sort_order=asc";
+            var expectedUrl = "http://api.stlouisfed.org/fred/sources?api_key=key" + RealtimeNow + "&limit=1000&offset=0&order_by=source_id&sort_order=asc";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(7, sources.Count());
         }
@@ -362,7 +364,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var source = fred.GetSource(1);
-            const string expectedUrl = "http://api.stlouisfed.org/fred/source?api_key=key&source_id=1&realtime_start=2012-04-26&realtime_end=2012-04-26";
+            var expectedUrl = "http://api.stlouisfed.org/fred/source?api_key=key&source_id=1" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(1, source.Id);
             Assert.AreEqual(new DateTime(2012, 4, 26), source.RealtimeStart);
@@ -386,7 +388,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var releases = fred.GetSourceReleases(1);
-            const string expectedUrl = "http://api.stlouisfed.org/fred/source/releases?api_key=key&source_id=1&realtime_start=2012-04-26&realtime_end=2012-04-26&limit=1000&offset=0&order_by=release_id&sort_order=asc";
+            var expectedUrl = "http://api.stlouisfed.org/fred/source/releases?api_key=key&source_id=1" + RealtimeNow + "&limit=1000&offset=0&order_by=release_id&sort_order=asc";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(5, releases.Count());
         }
@@ -406,7 +408,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var observations = fred.GetSeriesObservations("EXJPUS");
-            const string expectedUrl = "http://api.stlouisfed.org/fred/series/observations?api_key=key&series_id=EXJPUS&realtime_start=2012-04-26&realtime_end=2012-04-26&limit=100000&offset=0&sort_order=asc&observation_start=1776-07-04&observation_end=9999-12-31&units=lin&frequency=&aggregation_method=avg&output_type=1&file_type=xml&vintage_dates=";
+            var expectedUrl = "http://api.stlouisfed.org/fred/series/observations?api_key=key&series_id=EXJPUS" + RealtimeNow + "&limit=100000&offset=0&sort_order=asc&observation_start=1776-07-04&observation_end=9999-12-31&units=lin&frequency=&aggregation_method=avg&output_type=1&file_type=xml&vintage_dates=";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(6, observations.Count());
         }
@@ -446,6 +448,5 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
 
             #endregion
         }
-
     }
 }

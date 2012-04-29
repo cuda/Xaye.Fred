@@ -21,14 +21,17 @@ namespace Xaye.Fred
         private readonly IUrlDownloader _downloader;
         private readonly string _key = string.Empty;
         private readonly IDictionary<string, Series> _seriesCache = new Dictionary<string, Series>();
+        private bool _cache = true;
 
         /// <summary>
         /// Creates a Fred object with the given developer key.
         /// </summary>
+        /// <param name="cacheSeries">Should this Fred object cache series as it downloads them.</param>
         /// <param name="key">The FRED developer key.</param>
-        public Fred(string key)
+        public Fred(string key, bool cacheSeries=true)
             : this(key, new WebClientDownloader())
         {
+            _cache = cacheSeries;
         }
 
         /// <summary>
@@ -54,6 +57,14 @@ namespace Xaye.Fred
             _downloader = downloader;
         }
 
+        /// <summary>
+        /// Clears the series and category caches.
+        /// </summary>
+        public void ClearCache()
+        {
+            _categoryCache.Clear();
+            _seriesCache.Clear();
+        }
 
         /// <summary>
         /// Get all releases of economic data. Corresponds to http://api.stlouisfed.org/fred/releases
@@ -983,7 +994,7 @@ namespace Xaye.Fred
             var realtimeEnd = element.Attribute("realtime_end").Value.ToFredDate();
             var seriesKey = id + ":" + realtimeStart + ":" + realtimeEnd;
 
-            if (_seriesCache.ContainsKey(seriesKey))
+            if (_cache && _seriesCache.ContainsKey(seriesKey))
             {
                 return _seriesCache[seriesKey];
             }
@@ -1015,7 +1026,11 @@ namespace Xaye.Fred
                                          ? element.Attribute("notes").Value
                                          : string.Empty
                              };
-            _seriesCache.Add(seriesKey, series);
+            if(_cache)
+            {
+                _seriesCache.Add(seriesKey, series);
+            }
+
             return series;
         }
 
