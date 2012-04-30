@@ -104,12 +104,12 @@ namespace Xaye.Fred
                     if (_series == null)
                     {
                         const int limit = 1000;
-                        _series = (List<Series>)Fred.GetCategorySeries(Id, DateTime.Now, DateTime.Now, limit, 0);
+                        _series = (List<Series>)Fred.GetCategorySeries(Id, DateTime.Today, DateTime.Today, limit, 0);
                         var count = _series.Count();
                         var call = 1;
                         while (count == limit)
                         {
-                            var more = (List<Series>)Fred.GetCategorySeries(Id, DateTime.Now, DateTime.Now, limit, call * limit);
+                            var more = (List<Series>)Fred.GetCategorySeries(Id, DateTime.Today, DateTime.Today, limit, call * limit);
                             _series.AddRange(more);
                             count = more.Count();
                             call++;

@@ -7,7 +7,7 @@ namespace Xaye.Fred.Tests
     [TestFixture]
     public class Tests
     {
-        private static readonly string RealtimeNow = "&realtime_start=" + DateTime.Now.ToFredDateString() + "&realtime_end=" + DateTime.Now.ToFredDateString();
+        private static readonly string RealtimeNow = "&realtime_start=" + DateTime.Today.ToFredDateString() + "&realtime_end=" + DateTime.Today.ToFredDateString();
 
         [Test]
         public void CanGetACategory()
@@ -172,7 +172,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var dates = fred.GetReleaseDates(10);
-            string expectedUrl = "http://api.stlouisfed.org/fred/release/dates?api_key=key&release_id=10&realtime_start=1776-07-04&realtime_end=" + DateTime.Now.ToFredDateString() + "&limit=1000&offset=0&sort_order=asc&include_release_dates_with_no_data=false";
+            string expectedUrl = "http://api.stlouisfed.org/fred/release/dates?api_key=key&release_id=10&realtime_start=1776-07-04&realtime_end=" + DateTime.Today.ToFredDateString() + "&limit=1000&offset=0&sort_order=asc&include_release_dates_with_no_data=false";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(8, dates.Count());
         }

@@ -81,7 +81,7 @@ namespace Xaye.Fred
                         var call = 1;
                         while (count == limit)
                         {
-                            var more = (List<Series>)Fred.GetReleaseSeries(Id, DateTime.Now, DateTime.Now, limit, call * limit);
+                            var more = (List<Series>)Fred.GetReleaseSeries(Id, DateTime.Today, DateTime.Today, limit, call * limit);
                             _series.AddRange(more);
                             count = more.Count();
                             call++;
