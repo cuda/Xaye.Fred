@@ -9,7 +9,7 @@
         Daily,
         Weekly,
         BiWeekly,
-        Monthy,
+        Monthly,
         Quarterly,
         SemiAnnual,
         Annual,

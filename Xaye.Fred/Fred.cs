@@ -21,7 +21,7 @@ namespace Xaye.Fred
         private readonly IUrlDownloader _downloader;
         private readonly string _key = string.Empty;
         private readonly IDictionary<string, Series> _seriesCache = new Dictionary<string, Series>();
-        private bool _cache = true;
+        private readonly bool _cache = true;
 
         /// <summary>
         /// Creates a Fred object with the given developer key.
@@ -43,7 +43,8 @@ namespace Xaye.Fred
         /// we can mock the downloader.</remarks>
         public Fred(string key, IUrlDownloader downloader)
         {
-            if (string.IsNullOrWhiteSpace(key))
+            var trimmed = key.Trim();
+            if (string.IsNullOrWhiteSpace(trimmed))
             {
                 throw new ArgumentNullException("key", "The FRED key cannot be null or an empty string.");
             }
@@ -53,7 +54,7 @@ namespace Xaye.Fred
                 throw new ArgumentNullException("downloader", "The downloader cannot be null.");
             }
 
-            _key = key;
+            _key = trimmed;
             _downloader = downloader;
         }
 

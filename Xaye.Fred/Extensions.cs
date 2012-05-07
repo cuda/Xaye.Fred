@@ -58,7 +58,7 @@ namespace Xaye.Fred
             }
             else if (frequency.Equals("m"))
             {
-                ret = Frequency.Monthy;
+                ret = Frequency.Monthly;
             }
             else if (frequency.Equals("q"))
             {
@@ -165,7 +165,7 @@ namespace Xaye.Fred
                 case Frequency.BiWeekly:
                     ret = "bw";
                     break;
-                case Frequency.Monthy:
+                case Frequency.Monthly:
                     ret = "m";
                     break;
                 case Frequency.Quarterly:
