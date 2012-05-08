@@ -73,7 +73,6 @@ namespace Xaye.Fred
 
         #endregion
 
-        private readonly object _lok = new object();
         private IEnumerable<Category> _categories;
         private Release _release;
         private List<Observation> _data;
@@ -144,7 +143,7 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (_lok)
+                lock (Lock)
                 {
                     if (_release == null)
                     {
@@ -164,7 +163,7 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (_lok)
+                lock (Lock)
                 {
                     if (_categories == null)
                     {
@@ -183,19 +182,19 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (_lok)
+                lock (Lock)
                 {
                     if (_data == null)
                     {
                         const int limit = 100000;
                         _data = (List<Observation>)Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, RealtimeStart, RealtimeEnd, Enumerable.Empty<DateTime>(), limit, 0);
-                        var count = _data.Count();
+                        var count = _data.Count;
                         var call = 1;
                         while (count == limit)
                         {
                             var more = (List<Observation>)Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, RealtimeStart, RealtimeEnd, Enumerable.Empty<DateTime>(), limit, call * limit);
                             _data.AddRange(more);
-                            count = more.Count();
+                            count = more.Count;
                             call++;
                         }
                     }

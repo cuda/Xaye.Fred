@@ -9,7 +9,6 @@ namespace Xaye.Fred
     /// </summary>
     public class Category : Item
     {
-        private readonly object _lok = new object();
         private IEnumerable<Category> _childern;
         private Category _parent;
         private IEnumerable<Category> _related;
@@ -43,7 +42,7 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (_lok)
+                lock (Lock)
                 {
                     if (_parent == null)
                     {
@@ -61,7 +60,7 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (_lok)
+                lock (Lock)
                 {
                     if (_childern == null)
                     {
@@ -80,7 +79,7 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (_lok)
+                lock (Lock)
                 {
                     if (_related == null)
                     {
@@ -99,19 +98,19 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (_lok)
+                lock (Lock)
                 {
                     if (_series == null)
                     {
                         const int limit = 1000;
                         _series = (List<Series>)Fred.GetCategorySeries(Id, DateTime.Today, DateTime.Today, limit, 0);
-                        var count = _series.Count();
+                        var count = _series.Count;
                         var call = 1;
                         while (count == limit)
                         {
                             var more = (List<Series>)Fred.GetCategorySeries(Id, DateTime.Today, DateTime.Today, limit, call * limit);
                             _series.AddRange(more);
-                            count = more.Count();
+                            count = more.Count;
                             call++;
                         }
                     }

@@ -25,8 +25,6 @@ namespace Xaye.Fred
 
         #endregion
 
-        private readonly object _lok = new object();
-
         private List<Series> _series;
 
         internal Release(Fred fred) : base(fred)
@@ -71,19 +69,19 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (_lok)
+                lock (Lock)
                 {
                     if (_series == null)
                     {
                         const int limit = 1000;
                         _series = (List<Series>)Fred.GetReleaseSeries(Id, RealtimeStart, RealtimeEnd, limit, 0);
-                        var count = _series.Count();
+                        var count = _series.Count;
                         var call = 1;
                         while (count == limit)
                         {
                             var more = (List<Series>)Fred.GetReleaseSeries(Id, DateTime.Today, DateTime.Today, limit, call * limit);
                             _series.AddRange(more);
-                            count = more.Count();
+                            count = more.Count;
                             call++;
                         }
                     }

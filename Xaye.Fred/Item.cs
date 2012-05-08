@@ -7,6 +7,13 @@
     /// </summary>
     public abstract class Item
     {
+        private readonly object _lock = new object();
+
+        protected object Lock
+        {
+            get { return _lock; }
+        }
+
         protected Item(Fred fred)
         {
             Fred = fred;

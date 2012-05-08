@@ -230,7 +230,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             Assert.AreEqual(new DateTime(2012, 4, 26), series.RealtimeEnd);
             Assert.AreEqual(new DateTime(1913, 1, 1), series.ObservationStart);
             Assert.AreEqual(new DateTime(2012, 3, 1), series.ObservationEnd);
-            Assert.AreEqual(Frequency.Monthy, series.Frequency);
+            Assert.AreEqual(Frequency.Monthly, series.Frequency);
             Assert.AreEqual("Index 1982-84=100", series.Units);
             Assert.AreEqual(false, series.SeasonalAdjusted);
             Assert.AreEqual(new DateTime(2012, 4, 13, 9, 53, 0), series.LastUpdated);

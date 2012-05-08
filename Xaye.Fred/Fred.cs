@@ -941,9 +941,9 @@ namespace Xaye.Fred
             return root;
         }
 
-        private static Source CreateSource(XElement element)
+        private Source CreateSource(XElement element)
         {
-            return new Source
+            return new Source(this)
                        {
                            Id = int.Parse(element.Attribute("id").Value),
                            Name = element.Attribute("name").Value,
