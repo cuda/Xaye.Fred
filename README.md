@@ -37,6 +37,14 @@ Calls using the FRED API default values:
 	Source GetSource(int sourceId) -> http://api.stlouisfed.org/docs/fred/source.html
 	IEnumerable<Release> GetSourceReleases(int sourceId) -> http://api.stlouisfed.org/docs/fred/source_releases.html
 
+The library caches calls for Categories and Series (it returns a cached version if the object has already been retrieved from the FRED database). If you don't want a Fred instance to cache them, set caching to false in the constructor
+	
+	var fred = new Fred("api key", false);
+
+If caching in enabled, you can clear it at anytime by calling ClearCache().
+	
+	fred.ClearCache();
+
 ## Notes
 1. Overloaded versions are provided so user's can override FRED's default values. 
 2. Where properties on Release, Category, Source, and Series objects return an enumeration, the enumeration is lazily loaded. That is, a FRED API call is not made until that property is accessed.
