@@ -1,12 +1,16 @@
+#Xaye.Fred
+
 Xaye.Fred is a simple .NET wrapper around the Federal Reserve Economic Data (FRED) API. The library is part of the Xaye project, but doesn't depend on any other parts of Xaye (or any other library). It is licensed under the permissive Simplified BSD license. 
 
+## Installation
 Available via NuGet: https://nuget.org/packages/Xaye.Fred
+PM> Install-Package Xaye.Fred
 
 Note: A asynchronous version of the library will be released shortly after the .NET 4.5 is release.
 
-To use the library, you must have a FRED API key. A key can be obtained from http://research.stlouisfed.org/useraccount/apikey
+To use the library, you must have a FRED API key. A key can be obtained from [http://research.stlouisfed.org/useraccount/apikey]
 
-Usage
+## Usage
 Create a Xaye.Fred object:
 var fred = new Fred("api key");
 
@@ -34,7 +38,8 @@ Calls using the FRED API default values:
 	Source GetSource(int sourceId) -> http://api.stlouisfed.org/docs/fred/source.html
 	IEnumerable<Release> GetSourceReleases(int sourceId) -> http://api.stlouisfed.org/docs/fred/source_releases.html
 
+## Notes
 Overloaded versions are provided so user's can override FRED's default values. 
 
-Note: Where properties on Release, Category, Source, and Series objects return an enumeration, the enumeration is lazily loaded. That is, a FRED API call is not made until that property is accessed.
+Where properties on Release, Category, Source, and Series objects return an enumeration, the enumeration is lazily loaded. That is, a FRED API call is not made until that property is accessed.
 
