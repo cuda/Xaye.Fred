@@ -9,10 +9,10 @@ namespace Xaye.Fred
     /// </summary>
     public class Category : Item
     {
-        private IEnumerable<Category> _childern;
-        private Category _parent;
-        private IEnumerable<Category> _related;
-        private List<Series> _series;
+        private volatile IEnumerable<Category> _childern;
+        private volatile Category _parent;
+        private volatile IEnumerable<Category> _related;
+        private volatile List<Series> _series;
 
         internal Category(Fred fred) : base(fred)
         {
@@ -42,11 +42,14 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (Lock)
+                if (_parent == null)
                 {
-                    if (_parent == null)
+                    lock (Lock)
                     {
-                        _parent = Id == 0 ? this : Fred.GetCategory(ParentId);
+                        if (_parent == null)
+                        {
+                            _parent = Id == 0 ? this : Fred.GetCategory(ParentId);
+                        }
                     }
                 }
                 return _parent;
@@ -60,11 +63,14 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (Lock)
+                if (_childern == null)
                 {
-                    if (_childern == null)
+                    lock (Lock)
                     {
-                        _childern = Fred.GetCategoryChildern(Id);
+                        if (_childern == null)
+                        {
+                            _childern = Fred.GetCategoryChildern(Id);
+                        }
                     }
                 }
 
@@ -79,11 +85,14 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (Lock)
+                if (_related == null)
                 {
-                    if (_related == null)
+                    lock (Lock)
                     {
-                        _related = Fred.GetCategoryRelated(Id);
+                        if (_related == null)
+                        {
+                            _related = Fred.GetCategoryRelated(Id);
+                        }
                     }
                 }
 
@@ -98,20 +107,23 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (Lock)
+                if (_series == null)
                 {
-                    if (_series == null)
+                    lock (Lock)
                     {
-                        const int limit = 1000;
-                        _series = (List<Series>)Fred.GetCategorySeries(Id, DateTime.Today, DateTime.Today, limit, 0);
-                        var count = _series.Count;
-                        var call = 1;
-                        while (count == limit)
+                        if (_series == null)
                         {
-                            var more = (List<Series>)Fred.GetCategorySeries(Id, DateTime.Today, DateTime.Today, limit, call * limit);
-                            _series.AddRange(more);
-                            count = more.Count;
-                            call++;
+                            const int limit = 1000;
+                            _series = (List<Series>) Fred.GetCategorySeries(Id, DateTime.Today, DateTime.Today, limit, 0);
+                            var count = _series.Count;
+                            var call = 1;
+                            while (count == limit)
+                            {
+                                var more = (List<Series>) Fred.GetCategorySeries(Id, DateTime.Today, DateTime.Today, limit, call*limit);
+                                _series.AddRange(more);
+                                count = more.Count;
+                                call++;
+                            }
                         }
                     }
                 }

@@ -73,9 +73,9 @@ namespace Xaye.Fred
 
         #endregion
 
-        private IEnumerable<Category> _categories;
-        private Release _release;
-        private List<Observation> _data;
+        private volatile IEnumerable<Category> _categories;
+        private volatile Release _release;
+        private volatile List<Observation> _data;
 
         internal Series(Fred fred) : base(fred)
         {
@@ -143,11 +143,14 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (Lock)
+                if (_release == null)
                 {
-                    if (_release == null)
+                    lock (Lock)
                     {
-                        _release = Fred.GetSeriesRelease(Id, RealtimeStart, RealtimeEnd);
+                        if (_release == null)
+                        {
+                            _release = Fred.GetSeriesRelease(Id, RealtimeStart, RealtimeEnd);
+                        }
                     }
                 }
 
@@ -163,11 +166,14 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (Lock)
+                if (_categories == null)
                 {
-                    if (_categories == null)
+                    lock (Lock)
                     {
-                        _categories = Fred.GetSeriesCategories(Id, RealtimeStart, RealtimeEnd);
+                        if (_categories == null)
+                        {
+                            _categories = Fred.GetSeriesCategories(Id, RealtimeStart, RealtimeEnd);
+                        }
                     }
                 }
                 return _categories;
@@ -182,20 +188,26 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (Lock)
+                if (_data == null)
                 {
-                    if (_data == null)
+                    lock (Lock)
                     {
-                        const int limit = 100000;
-                        _data = (List<Observation>)Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, RealtimeStart, RealtimeEnd, Enumerable.Empty<DateTime>(), limit, 0);
-                        var count = _data.Count;
-                        var call = 1;
-                        while (count == limit)
+                        if (_data == null)
                         {
-                            var more = (List<Observation>)Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, RealtimeStart, RealtimeEnd, Enumerable.Empty<DateTime>(), limit, call * limit);
-                            _data.AddRange(more);
-                            count = more.Count;
-                            call++;
+                            const int limit = 100000;
+                            _data = (List<Observation>) Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, RealtimeStart,
+                                                            RealtimeEnd, Enumerable.Empty<DateTime>(), limit, 0);
+                            var count = _data.Count;
+                            var call = 1;
+                            while (count == limit)
+                            {
+                                var more = (List<Observation>) Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, RealtimeStart,
+                                                                RealtimeEnd, Enumerable.Empty<DateTime>(), limit,
+                                                                call*limit);
+                                _data.AddRange(more);
+                                count = more.Count;
+                                call++;
+                            }
                         }
                     }
                 }

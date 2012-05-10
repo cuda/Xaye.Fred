@@ -26,7 +26,7 @@ namespace Xaye.Fred
 
         #endregion
 
-        private List<Release> _releases;
+        private volatile List<Release> _releases;
 
         internal Source(Fred fred) : base(fred)
         {
@@ -65,20 +65,23 @@ namespace Xaye.Fred
         {
             get
             {
-                lock (Lock)
+                if (_releases == null)
                 {
-                    if (_releases == null)
+                    lock (Lock)
                     {
-                        const int limit = 1000;
-                        _releases = (List<Release>) Fred.GetSourceReleases(Id);
-                        var count = _releases.Count;
-                        var call = 1;
-                        while (count == limit)
+                        if (_releases == null)
                         {
-                            var more = (List<Release>)Fred.GetSourceReleases(Id, DateTime.Today, DateTime.Today, limit, call*limit);
-                            _releases.AddRange(more);
-                            count = more.Count;
-                            call++;
+                            const int limit = 1000;
+                            _releases = (List<Release>) Fred.GetSourceReleases(Id);
+                            var count = _releases.Count;
+                            var call = 1;
+                            while (count == limit)
+                            {
+                                var more = (List<Release>) Fred.GetSourceReleases(Id, DateTime.Today, DateTime.Today, limit, call*limit);
+                                _releases.AddRange(more);
+                                count = more.Count;
+                                call++;
+                            }
                         }
                     }
                 }
