@@ -233,7 +233,8 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             Assert.AreEqual(Frequency.Monthly, series.Frequency);
             Assert.AreEqual("Index 1982-84=100", series.Units);
             Assert.AreEqual(false, series.SeasonalAdjusted);
-            Assert.AreEqual(new DateTime(2012, 4, 13, 9, 53, 0), series.LastUpdated);
+            var expectedDate = new DateTime(2012, 4, 13, 13, 53, 0, DateTimeKind.Utc);
+            Assert.AreEqual(expectedDate.ToLocalTime(), series.LastUpdated);
             Assert.AreEqual(78, series.Popularity);
             Assert.AreEqual("Handbook of Methods - (http://www.bls.gov/opub/hom/pdf/homch17.pdf) Understanding the CPI: Frequently Asked Questions - (http://stats.bls.gov:80/cpi/cpifaq.htm)", series.Notes);
         }

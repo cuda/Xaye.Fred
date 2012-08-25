@@ -924,6 +924,7 @@ namespace Xaye.Fred
             catch (WebException exp)
             {
                 var response = (HttpWebResponse) exp.Response;
+                if (response == null) throw; 
                 var buffer = new byte[response.ContentLength];
                 response.GetResponseStream().Read(buffer, 0, buffer.Length);
                 var xml = Encoding.UTF8.GetString(buffer);
