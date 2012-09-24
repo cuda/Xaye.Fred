@@ -422,32 +422,5 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
             fred.GetSeriesObservationsFile("EXJPUS", FileType.Xls, "c:\\temp\\exjpus.xls");
             fred.GetSeriesObservationsFile("EXJPUS", FileType.Text, "c:\\temp\\exjpus.txt");
         }*/
-
-        internal class MockDownloader : IUrlDownloader
-        {
-            private readonly string _response;
-
-            public MockDownloader(string resposnse)
-            {
-                _response = resposnse;
-            }
-
-            public string Url { get; private set; }
-
-            #region IUrlDownloader Members
-
-            public string Download(string url)
-            {
-                Url = url;
-                return _response;
-            }
-
-            public void DownloadFile(string url, string filename)
-            {
-                throw new NotImplementedException();
-            }
-
-            #endregion
-        }
     }
 }
