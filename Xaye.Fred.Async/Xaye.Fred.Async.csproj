@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{99729781-637F-433A-A320-42773B69FB99}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Xaye.Fred</RootNamespace>
+    <AssemblyName>Xaye.Fred.Async</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Xaye.Fred\AggregationMethod.cs">
+      <Link>AggregationMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\Category.cs">
+      <Link>Category.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\Extensions.cs">
+      <Link>Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\FileType.cs">
+      <Link>FileType.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\Fred.cs">
+      <Link>Fred.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\FredException.cs">
+      <Link>FredException.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\Frequency.cs">
+      <Link>Frequency.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\Item.cs">
+      <Link>Item.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\IUrlDownloader.cs">
+      <Link>IUrlDownloader.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\Observation.cs">
+      <Link>Observation.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\OutputType.cs">
+      <Link>OutputType.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\Release.cs">
+      <Link>Release.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\ReleaseDate.cs">
+      <Link>ReleaseDate.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\SearchType.cs">
+      <Link>SearchType.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\Series.cs">
+      <Link>Series.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\SortOrder.cs">
+      <Link>SortOrder.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\Source.cs">
+      <Link>Source.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\Transformation.cs">
+      <Link>Transformation.cs</Link>
+    </Compile>
+    <Compile Include="..\Xaye.Fred\Urls.cs">
+      <Link>Urls.cs</Link>
+    </Compile>
+    <Compile Include="FredAsync.cs" />
+    <Compile Include="IUrlDownloaderAsync.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
