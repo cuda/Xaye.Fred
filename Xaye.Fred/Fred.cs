@@ -95,7 +95,8 @@ namespace Xaye.Fred
         /// <returns>All releases in the FRED database.</returns>
         public IEnumerable<Release> GetReleases()
         {
-            return GetReleases(DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return GetReleases(now, now);
         }
 
         /// <summary>
@@ -131,7 +132,8 @@ namespace Xaye.Fred
         /// <remarks>Note that release dates are published by data sources and do not necessarily represent when data will be available on the FRED or ALFRED websites.</remarks>
         public Release GetRelease(int releaseId)
         {
-            return GetRelease(releaseId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return GetRelease(releaseId, now, now);
         }
 
         /// <summary>
@@ -174,7 +176,8 @@ namespace Xaye.Fred
         /// <remarks>Note that release dates are published by data sources and do not necessarily represent when data will be available on the FRED or ALFRED websites.</remarks>    
         public IEnumerable<ReleaseDate> GetReleasesDates()
         {
-            return GetReleasesDates(DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return GetReleasesDates(now, now);
         }
 
 
@@ -218,7 +221,7 @@ namespace Xaye.Fred
         /// <remarks>Note that release dates are published by data sources and do not necessarily represent when data will be available on the FRED or ALFRED websites.</remarks>
         public IEnumerable<ReleaseDate> GetReleaseDates(int releaseId)
         {
-            return GetReleaseDates(releaseId, new DateTime(1776, 7, 4), DateTime.Today);
+            return GetReleaseDates(releaseId, new DateTime(1776, 7, 4), CstTime());
         }
 
         /// <summary>
@@ -257,7 +260,8 @@ namespace Xaye.Fred
         /// <returns>The series on a release of economic data. </returns>
         public IEnumerable<Series> GetReleaseSeries(int releaseId)
         {
-            return GetReleaseSeries(releaseId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return GetReleaseSeries(releaseId, now, now);
         }
 
         /// <summary>
@@ -282,7 +286,8 @@ namespace Xaye.Fred
         /// <returns>The sources for a release of economic data.</returns>
         public IEnumerable<Source> GetReleaseSources(int releaseId)
         {
-            return GetReleaseSources(releaseId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return GetReleaseSources(releaseId, now, now);
         }
 
         /// <summary>
@@ -330,7 +335,8 @@ namespace Xaye.Fred
         /// <returns>The related categories for a category.</returns>
         public IEnumerable<Category> GetCategoryRelated(int categoryId)
         {
-            return GetCategoryRelated(categoryId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return GetCategoryRelated(categoryId, now, now);
         }
 
         /// <summary>
@@ -355,7 +361,8 @@ namespace Xaye.Fred
         /// <returns>The child categories for a specified parent category</returns>        
         public IEnumerable<Category> GetCategoryChildern(int categoryId)
         {
-            return GetCategoryChildern(categoryId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return GetCategoryChildern(categoryId, now, now);
         }
 
         /// <summary>
@@ -392,7 +399,8 @@ namespace Xaye.Fred
         /// <returns>The series in a category.</returns>
         public IEnumerable<Series> GetCategorySeries(int categoryId)
         {
-            return GetCategorySeries(categoryId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return GetCategorySeries(categoryId, now, now);
         }
 
         /// <summary>
@@ -418,7 +426,8 @@ namespace Xaye.Fred
         /// <returns>An economic data series.</returns>
         public Series GetSeries(string seriesId)
         {
-            return GetSeries(seriesId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return GetSeries(seriesId, now, now);
         }
 
         /// <summary> 
@@ -443,7 +452,8 @@ namespace Xaye.Fred
         /// <returns>The categories for an economic data series.</returns>        
         public IEnumerable<Category> GetSeriesCategories(string seriesId)
         {
-            return GetSeriesCategories(seriesId, DateTime.Today, DateTime.Today);
+            var now = CstTime(); 
+            return GetSeriesCategories(seriesId, now, now);
         }
 
         /// <summary>
@@ -469,7 +479,8 @@ namespace Xaye.Fred
         /// <returns>The release for an economic data series.</returns>
         public Release GetSeriesRelease(string seriesId)
         {
-            return GetSeriesRelease(seriesId, DateTime.Today, DateTime.Today);
+            var now = CstTime();            
+            return GetSeriesRelease(seriesId, now, now);
         }
 
         /// <summary>
@@ -529,7 +540,8 @@ namespace Xaye.Fred
         /// <returns>Economic data series that match keywords</returns>
         public IEnumerable<Series> GetSeriesSearch(string searchText, SearchType type = SearchType.FullText)
         {
-            return GetSeriesSearch(searchText, DateTime.Today, DateTime.Today, type);
+            var now = CstTime();
+            return GetSeriesSearch(searchText, now, now, type);
         }
 
         /// <summary>
@@ -565,7 +577,8 @@ namespace Xaye.Fred
         /// <returns>An economic data series.</returns>
         public IEnumerable<Series> GetSeriesUpdates()
         {
-            return GetSeriesUpdates(DateTime.Today, DateTime.Today);
+            var now = CstTime(); 
+            return GetSeriesUpdates(now, now);
         }
 
         /// <summary>
@@ -710,8 +723,8 @@ namespace Xaye.Fred
                                               DateTime observationStart,
                                               DateTime observationEnd)
         {
-            GetSeriesObservationsFile(seriesId, fileType, filename, observationStart, observationEnd, DateTime.Today,
-                                      DateTime.Today, Enumerable.Empty<DateTime>());
+            GetSeriesObservationsFile(seriesId, fileType, filename, observationStart, observationEnd, CstTime(),
+                                      CstTime(), Enumerable.Empty<DateTime>());
         }
 
         /// <summary>
@@ -825,7 +838,8 @@ namespace Xaye.Fred
         public IEnumerable<Observation> GetSeriesObservations(string seriesId, DateTime observationStart,
                                                               DateTime observationEnd)
         {
-            return GetSeriesObservations(seriesId, observationStart, observationEnd, DateTime.Today, DateTime.Today,
+            var now = CstTime();
+            return GetSeriesObservations(seriesId, observationStart, observationEnd, now, now,
                                          Enumerable.Empty<DateTime>());
         }
 
@@ -869,7 +883,8 @@ namespace Xaye.Fred
         /// <returns>All sources of economic data.</returns> 
         public IEnumerable<Source> GetSources()
         {
-            return GetSources(DateTime.Today, DateTime.Today);
+            var now = CstTime(); 
+            return GetSources(now, now);
         }
 
         /// <summary>
@@ -895,7 +910,8 @@ namespace Xaye.Fred
         /// <returns>A source of economic data.</returns>
         public Source GetSource(int sourceId)
         {
-            return GetSource(sourceId, DateTime.Today, DateTime.Today);
+            var now = CstTime();            
+            return GetSource(sourceId, now, now);
         }
 
         /// <summary>
@@ -929,7 +945,8 @@ namespace Xaye.Fred
         /// <returns>The releases for a source.</returns>
         public IEnumerable<Release> GetSourceReleases(int sourceId)
         {
-            return GetSourceReleases(sourceId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return GetSourceReleases(sourceId, now, now);
         }
 
         private static FredExecption CreateException(WebException exp)
@@ -1089,6 +1106,15 @@ namespace Xaye.Fred
         private IEnumerable<Category> CreateCategories(string url)
         {
             return GetRoot(url).Elements("category").Select(CreateCategory).ToList();
+        }
+
+        /// <summary>
+        /// Gets the current time as a DateTime with a Central Standard Time timezone (St. Louis).
+        /// </summary>
+        /// <returns>A DateTime with a Central Standard Time timezone (St. Louis).</returns>
+        public static DateTime CstTime()
+        {
+            return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, TimeZoneInfo.Utc.Id, "Central Standard Time");
         }
     }
 }

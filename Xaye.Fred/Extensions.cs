@@ -10,6 +10,12 @@ namespace Xaye.Fred
     {
         private const string DateFormat = "yyyy-MM-dd";
         private const string DateTimeFormat = "yyyy-MM-dd HH:mm:sszz";
+        
+        /// <summary>
+        /// Converts a string to a FRED formated date string.
+        /// </summary>
+        /// <param name="date">The date to convert.</param>
+        /// <returns>A FRED formatted date string.</returns>
         public static string ToFredDateString(this DateTime date)
         {
             return date.ToString(DateFormat);
@@ -22,7 +28,7 @@ namespace Xaye.Fred
         /// <returns>The converted date.</returns>
         public static DateTime ToFredDate(this string date)
         {
-            return DateTime.ParseExact(date, DateFormat, CultureInfo.CurrentCulture);
+            return DateTime.ParseExact(date, DateFormat, CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -32,7 +38,7 @@ namespace Xaye.Fred
         /// <returns>The converted date.</returns>
         public static DateTime ToFredDateTime(this string date)
         {
-            return DateTime.ParseExact(date, DateTimeFormat, CultureInfo.CurrentCulture);
+            return DateTime.ParseExact(date, DateTimeFormat, CultureInfo.InvariantCulture);
         }
 
         /// <summary>

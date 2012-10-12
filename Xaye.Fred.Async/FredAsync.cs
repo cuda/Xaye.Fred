@@ -42,7 +42,8 @@ namespace Xaye.Fred
         /// <returns>All releases in the FRED database.</returns>
         public async Task<IEnumerable<Release>> GetReleasesAsync()
         {
-            return await GetReleasesAsync(DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetReleasesAsync(now, now);
         }
 
         /// <summary>
@@ -79,7 +80,8 @@ namespace Xaye.Fred
         /// <remarks>Note that release dates are published by data sources and do not necessarily represent when data will be available on the FRED or ALFRED websites.</remarks>
         public async Task<Release> GetReleaseAsync(int releaseId)
         {
-            return await GetReleaseAsync(releaseId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetReleaseAsync(releaseId, now, now);
         }
 
         /// <summary>
@@ -122,7 +124,8 @@ namespace Xaye.Fred
         /// <remarks>Note that release dates are published by data sources and do not necessarily represent when data will be available on the FRED or ALFRED websites.</remarks>    
         public async Task<IEnumerable<ReleaseDate>> GetReleasesDatesAsync()
         {
-            return await GetReleasesDatesAsync(DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetReleasesDatesAsync(now, now);
         }
 
 
@@ -167,7 +170,7 @@ namespace Xaye.Fred
         /// <remarks>Note that release dates are published by data sources and do not necessarily represent when data will be available on the FRED or ALFRED websites.</remarks>
         public async Task<IEnumerable<ReleaseDate>> GetReleaseDatesAsync(int releaseId)
         {
-            return await GetReleaseDatesAsync(releaseId, new DateTime(1776, 7, 4), DateTime.Today);
+            return await GetReleaseDatesAsync(releaseId, new DateTime(1776, 7, 4), CstTime());
         }
 
         /// <summary>
@@ -206,7 +209,8 @@ namespace Xaye.Fred
         /// <returns>The series on a release of economic data. </returns>
         public async Task<IEnumerable<Series>> GetReleaseSeriesAsync(int releaseId)
         {
-            return await GetReleaseSeriesAsync(releaseId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetReleaseSeriesAsync(releaseId, now, now);
         }
 
         /// <summary>
@@ -231,7 +235,8 @@ namespace Xaye.Fred
         /// <returns>The sources for a release of economic data.</returns>
         public async Task<IEnumerable<Source>> GetReleaseSourcesAsync(int releaseId)
         {
-            return await GetReleaseSourcesAsync(releaseId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetReleaseSourcesAsync(releaseId, now, now);
         }
 
         /// <summary>
@@ -280,7 +285,8 @@ namespace Xaye.Fred
         /// <returns>The related categories for a category.</returns>
         public async Task<IEnumerable<Category>> GetCategoryRelatedAsync(int categoryId)
         {
-            return await GetCategoryRelatedAsync(categoryId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetCategoryRelatedAsync(categoryId, now, now);
         }
 
         /// <summary>
@@ -305,7 +311,8 @@ namespace Xaye.Fred
         /// <returns>The child categories for a specified parent category</returns>        
         public async Task<IEnumerable<Category>> GetCategoryChildernAsync(int categoryId)
         {
-            return await GetCategoryChildernAsync(categoryId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetCategoryChildernAsync(categoryId, now, now);
         }
 
         /// <summary>
@@ -342,7 +349,8 @@ namespace Xaye.Fred
         /// <returns>The series in a category.</returns>
         public async Task<IEnumerable<Series>> GetCategorySeriesAsync(int categoryId)
         {
-            return await GetCategorySeriesAsync(categoryId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetCategorySeriesAsync(categoryId, now, now);
         }
 
         /// <summary>
@@ -369,7 +377,8 @@ namespace Xaye.Fred
         /// <returns>An economic data series.</returns>
         public async Task<Series> GetSeriesAsync(string seriesId)
         {
-            return await GetSeriesAsync(seriesId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetSeriesAsync(seriesId, now, now);
         }
 
         /// <summary> 
@@ -394,7 +403,8 @@ namespace Xaye.Fred
         /// <returns>The categories for an economic data series.</returns>        
         public async Task<IEnumerable<Category>> GetSeriesCategoriesAsync(string seriesId)
         {
-            return await GetSeriesCategoriesAsync(seriesId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetSeriesCategoriesAsync(seriesId, now, now);
         }
 
         /// <summary>
@@ -421,7 +431,8 @@ namespace Xaye.Fred
         /// <returns>The release for an economic data series.</returns>
         public async Task<Release> GetSeriesReleaseAsync(string seriesId)
         {
-            return await GetSeriesReleaseAsync(seriesId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetSeriesReleaseAsync(seriesId, now, now);
         }
 
         /// <summary>
@@ -481,7 +492,8 @@ namespace Xaye.Fred
         /// <returns>Economic data series that match keywords</returns>
         public async Task<IEnumerable<Series>> GetSeriesSearchAsync(string searchText, SearchType type = SearchType.FullText)
         {
-            return await GetSeriesSearchAsync(searchText, DateTime.Today, DateTime.Today, type);
+            var now = CstTime();
+            return await GetSeriesSearchAsync(searchText, now, now, type);
         }
 
         /// <summary>
@@ -517,7 +529,8 @@ namespace Xaye.Fred
         /// <returns>An economic data series.</returns>
         public async Task<IEnumerable<Series>> GetSeriesUpdatesAsync()
         {
-            return await GetSeriesUpdatesAsync(DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetSeriesUpdatesAsync(now, now);
         }
 
         /// <summary>
@@ -662,8 +675,8 @@ namespace Xaye.Fred
                                               DateTime observationStart,
                                               DateTime observationEnd)
         {
-            await GetSeriesObservationsFileAsync(seriesId, fileType, filename, observationStart, observationEnd, DateTime.Today,
-                                      DateTime.Today, Enumerable.Empty<DateTime>());
+            await GetSeriesObservationsFileAsync(seriesId, fileType, filename, observationStart, observationEnd, CstTime(),
+                                      CstTime(), Enumerable.Empty<DateTime>());
         }
 
         /// <summary>
@@ -778,7 +791,8 @@ namespace Xaye.Fred
         public async Task<IEnumerable<Observation>> GetSeriesObservationsAsync(string seriesId, DateTime observationStart,
                                                               DateTime observationEnd)
         {
-            return await GetSeriesObservationsAsync(seriesId, observationStart, observationEnd, DateTime.Today, DateTime.Today,
+            var now = CstTime();
+            return await GetSeriesObservationsAsync(seriesId, observationStart, observationEnd, now, now,
                                          Enumerable.Empty<DateTime>());
         }
 
@@ -822,7 +836,8 @@ namespace Xaye.Fred
         /// <returns>All sources of economic data.</returns> 
         public async Task<IEnumerable<Source>> GetSourcesAsync()
         {
-            return await GetSourcesAsync(DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetSourcesAsync(now, now);
         }
 
         /// <summary>
@@ -849,7 +864,8 @@ namespace Xaye.Fred
         /// <returns>A source of economic data.</returns>
         public async Task<Source> GetSourceAsync(int sourceId)
         {
-            return await GetSourceAsync(sourceId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetSourceAsync(sourceId, now, now);
         }
 
         /// <summary>
@@ -883,7 +899,8 @@ namespace Xaye.Fred
         /// <returns>The releases for a source.</returns>
         public async Task<IEnumerable<Release>> GetSourceReleasesAsync(int sourceId)
         {
-            return await GetSourceReleasesAsync(sourceId, DateTime.Today, DateTime.Today);
+            var now = CstTime();
+            return await GetSourceReleasesAsync(sourceId, now, now);
         }
 
 
