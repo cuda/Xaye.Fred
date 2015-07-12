@@ -2,7 +2,7 @@
 {
     internal static class Urls
     {
-        public const string BaseUrl = "http://api.stlouisfed.org/fred/";
+        public const string BaseUrl = "https://api.stlouisfed.org/fred/";
 
         public const string Releases =
             BaseUrl +

@@ -19,7 +19,7 @@ namespace Xaye.Fred.Tests
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var category = await fred.GetCategoryAsync(1);
-            const string expectedUrl = "http://api.stlouisfed.org/fred/category?api_key=key&category_id=1";
+            const string expectedUrl = "https://api.stlouisfed.org/fred/category?api_key=key&category_id=1";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(1, category.Id);
             Assert.AreEqual("Production & Business Activity", category.Name);
@@ -45,7 +45,7 @@ namespace Xaye.Fred.Tests
             var fred = new Fred("key", downloader);
             var categories = await fred.GetCategoryChildernAsync(1);
             var expectedUrl =
-                "http://api.stlouisfed.org/fred/category/children?api_key=key&category_id=1" + RealtimeNow;
+                "https://api.stlouisfed.org/fred/category/children?api_key=key&category_id=1" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(9, categories.Count());
         }
@@ -67,7 +67,7 @@ namespace Xaye.Fred.Tests
             var fred = new Fred("key", downloader);
             var categories = await fred.GetCategoryRelatedAsync(32073);
             var expectedUrl =
-                "http://api.stlouisfed.org/fred/category/related?api_key=key&category_id=32073" + RealtimeNow;
+                "https://api.stlouisfed.org/fred/category/related?api_key=key&category_id=32073" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(7, categories.Count());
         }
@@ -83,7 +83,7 @@ namespace Xaye.Fred.Tests
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var series = await fred.GetCategorySeriesAsync(1);
-            var expectedUrl ="http://api.stlouisfed.org/fred/category/series?api_key=key&category_id=1" + RealtimeNow + "&limit=1000&offset=0&order_by=series_id&sort_order=asc&filter_variable=&filter_value=";
+            var expectedUrl ="https://api.stlouisfed.org/fred/category/series?api_key=key&category_id=1" + RealtimeNow + "&limit=1000&offset=0&order_by=series_id&sort_order=asc&filter_variable=&filter_value=";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(2, series.Count());
         }
@@ -93,28 +93,28 @@ namespace Xaye.Fred.Tests
         {
             const string response = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <releases realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" order_by=""release_id"" sort_order=""asc"" count=""132"" offset=""0"" limit=""1000"">
-  <release id=""9"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Advance Monthly Sales for Retail and Food Services"" press_release=""true"" link=""http://www.census.gov/svsd/www/advtable.html""/>
-  <release id=""10"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Consumer Price Index"" press_release=""true"" link=""http://www.bls.gov/cpi/""/>
-  <release id=""11"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Employment Cost Index"" press_release=""true"" link=""http://www.bls.gov/ncs/ect/""/>
-  <release id=""13"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.17 Industrial Production and Capacity Utilization"" press_release=""true"" link=""http://www.federalreserve.gov/releases/g17/""/>
-  <release id=""14"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.19 Consumer Credit"" press_release=""true"" link=""http://www.federalreserve.gov/releases/g19/""/>
-  <release id=""15"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.5 Foreign Exchange Rates"" press_release=""true"" link=""http://www.federalreserve.gov/releases/g5/""/>
-  <release id=""17"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.10 Foreign Exchange Rates"" press_release=""true"" link=""http://www.federalreserve.gov/releases/h10/""/>
-  <release id=""18"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.15 Selected Interest Rates"" press_release=""true"" link=""http://www.federalreserve.gov/releases/h15/""/>
-  <release id=""19"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.3 Aggregate Reserves of Depository Institutions and the Monetary Base"" press_release=""true"" link=""http://www.federalreserve.gov/releases/h3/""/>
-  <release id=""20"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.4.1 Factors Affecting Reserve Balances"" press_release=""true"" link=""http://www.federalreserve.gov/releases/h41/""/>
-  <release id=""21"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.6 Money Stock Measures"" press_release=""true"" link=""http://www.federalreserve.gov/releases/h6/""/>
-  <release id=""22"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.8 Assets and Liabilities of Commercial Banks in the United States"" press_release=""true"" link=""http://www.federalreserve.gov/releases/h8/""/>
+  <release id=""9"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Advance Monthly Sales for Retail and Food Services"" press_release=""true"" link=""https://www.census.gov/svsd/www/advtable.html""/>
+  <release id=""10"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Consumer Price Index"" press_release=""true"" link=""https://www.bls.gov/cpi/""/>
+  <release id=""11"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Employment Cost Index"" press_release=""true"" link=""https://www.bls.gov/ncs/ect/""/>
+  <release id=""13"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.17 Industrial Production and Capacity Utilization"" press_release=""true"" link=""https://www.federalreserve.gov/releases/g17/""/>
+  <release id=""14"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.19 Consumer Credit"" press_release=""true"" link=""https://www.federalreserve.gov/releases/g19/""/>
+  <release id=""15"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.5 Foreign Exchange Rates"" press_release=""true"" link=""https://www.federalreserve.gov/releases/g5/""/>
+  <release id=""17"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.10 Foreign Exchange Rates"" press_release=""true"" link=""https://www.federalreserve.gov/releases/h10/""/>
+  <release id=""18"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.15 Selected Interest Rates"" press_release=""true"" link=""https://www.federalreserve.gov/releases/h15/""/>
+  <release id=""19"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.3 Aggregate Reserves of Depository Institutions and the Monetary Base"" press_release=""true"" link=""https://www.federalreserve.gov/releases/h3/""/>
+  <release id=""20"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.4.1 Factors Affecting Reserve Balances"" press_release=""true"" link=""https://www.federalreserve.gov/releases/h41/""/>
+  <release id=""21"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.6 Money Stock Measures"" press_release=""true"" link=""https://www.federalreserve.gov/releases/h6/""/>
+  <release id=""22"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.8 Assets and Liabilities of Commercial Banks in the United States"" press_release=""true"" link=""https://www.federalreserve.gov/releases/h8/""/>
  
-  <release id=""186"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.5A Foreign Exchange Rates"" press_release=""true"" link=""http://www.federalreserve.gov/releases/g5a/""/>
+  <release id=""186"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.5A Foreign Exchange Rates"" press_release=""true"" link=""https://www.federalreserve.gov/releases/g5a/""/>
   <release id=""187"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""St. Louis Financial Stress Index"" press_release=""false"" notes=""To obtain detailed information regarding the construction of the St. Louis Financial Stress Index, please see the online appendix at
 
-http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
+https://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
 </releases>";
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var releases = await fred.GetReleasesAsync();
-            var expectedUrl = "http://api.stlouisfed.org/fred/releases?api_key=key" + RealtimeNow + "&limit=1000&offset=0&order_by=release_id&sort_order=asc";
+            var expectedUrl = "https://api.stlouisfed.org/fred/releases?api_key=key" + RealtimeNow + "&limit=1000&offset=0&order_by=release_id&sort_order=asc";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(14, releases.Count());
         }
@@ -129,7 +129,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var dates = await fred.GetReleasesDatesAsync();
-            var expectedUrl = "http://api.stlouisfed.org/fred/releases/dates?api_key=key" + RealtimeNow + "&limit=1000&offset=0&order_by=release_id&sort_order=asc&include_release_dates_with_no_data=false";
+            var expectedUrl = "https://api.stlouisfed.org/fred/releases/dates?api_key=key" + RealtimeNow + "&limit=1000&offset=0&order_by=release_id&sort_order=asc&include_release_dates_with_no_data=false";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(1, dates.Count());
         }
@@ -139,17 +139,17 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
         {
             const string response = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <releases realtime_start=""2012-04-26"" realtime_end=""2012-04-26"">
-  <release id=""10"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Consumer Price Index"" press_release=""true"" link=""http://www.bls.gov/cpi/""/>
+  <release id=""10"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Consumer Price Index"" press_release=""true"" link=""https://www.bls.gov/cpi/""/>
 </releases>";
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var release = await fred.GetReleaseAsync(10);
-            var expectedUrl = "http://api.stlouisfed.org/fred/release?api_key=key&release_id=10" + RealtimeNow;
+            var expectedUrl = "https://api.stlouisfed.org/fred/release?api_key=key&release_id=10" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(10, release.Id);
             Assert.AreEqual("Consumer Price Index", release.Name);
             Assert.AreEqual(true, release.PressRelease);
-            Assert.AreEqual("http://www.bls.gov/cpi/", release.Link);
+            Assert.AreEqual("https://www.bls.gov/cpi/", release.Link);
             Assert.AreEqual("", release.Notes);
             Assert.AreEqual(new DateTime(2012,4,26), release.RealtimeStart);
             Assert.AreEqual(new DateTime(2012, 4, 26), release.RealtimeEnd);
@@ -172,7 +172,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var dates = await fred.GetReleaseDatesAsync(10);
-            string expectedUrl = "http://api.stlouisfed.org/fred/release/dates?api_key=key&release_id=10&realtime_start=1776-07-04&realtime_end=" + DateTime.Today.ToFredDateString() + "&limit=1000&offset=0&sort_order=asc&include_release_dates_with_no_data=false";
+            string expectedUrl = "https://api.stlouisfed.org/fred/release/dates?api_key=key&release_id=10&realtime_start=1776-07-04&realtime_end=" + DateTime.Today.ToFredDateString() + "&limit=1000&offset=0&sort_order=asc&include_release_dates_with_no_data=false";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(8, dates.Count());
         }
@@ -184,14 +184,14 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
 <seriess realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" order_by=""series_id"" sort_order=""asc"" count=""4400"" offset=""0"" limit=""1000"">
   <series id=""CPIAPPNS"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Consumer Price Index for All Urban Consumers: Apparel"" observation_start=""1914-12-01"" observation_end=""2012-03-01"" frequency=""Monthly"" frequency_short=""M"" units=""Index 1982-84=100"" units_short=""Index 1982-84=100"" seasonal_adjustment=""Not Seasonally Adjusted"" seasonal_adjustment_short=""NSA"" last_updated=""2012-04-13 08:56:19-05"" popularity=""45""/>
   <series id=""CPIAPPSL"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Consumer Price Index for All Urban Consumers: Apparel"" observation_start=""1947-01-01"" observation_end=""2012-03-01"" frequency=""Monthly"" frequency_short=""M"" units=""Index 1982-84=100"" units_short=""Index 1982-84=100"" seasonal_adjustment=""Seasonally Adjusted"" seasonal_adjustment_short=""SA"" last_updated=""2012-04-13 09:03:50-05"" popularity=""38""/>
-  <series id=""CPIAUCNS"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Consumer Price Index for All Urban Consumers: All Items"" observation_start=""1913-01-01"" observation_end=""2012-03-01"" frequency=""Monthly"" frequency_short=""M"" units=""Index 1982-84=100"" units_short=""Index 1982-84=100"" seasonal_adjustment=""Not Seasonally Adjusted"" seasonal_adjustment_short=""NSA"" last_updated=""2012-04-13 08:53:00-05"" popularity=""78"" notes=""Handbook of Methods - (http://www.bls.gov/opub/hom/pdf/homch17.pdf) Understanding the CPI: Frequently Asked Questions - (http://stats.bls.gov:80/cpi/cpifaq.htm)""/>
-  <series id=""CPIAUCSL"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Consumer Price Index for All Urban Consumers: All Items"" observation_start=""1947-01-01"" observation_end=""2012-03-01"" frequency=""Monthly"" frequency_short=""M"" units=""Index 1982-84=100"" units_short=""Index 1982-84=100"" seasonal_adjustment=""Seasonally Adjusted"" seasonal_adjustment_short=""SA"" last_updated=""2012-04-13 08:49:51-05"" popularity=""100"" notes=""Handbook of Methods - (http://www.bls.gov/opub/hom/pdf/homch17.pdf) Understanding the CPI: Frequently Asked Questions - (http://stats.bls.gov:80/cpi/cpifaq.htm)""/>
+  <series id=""CPIAUCNS"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Consumer Price Index for All Urban Consumers: All Items"" observation_start=""1913-01-01"" observation_end=""2012-03-01"" frequency=""Monthly"" frequency_short=""M"" units=""Index 1982-84=100"" units_short=""Index 1982-84=100"" seasonal_adjustment=""Not Seasonally Adjusted"" seasonal_adjustment_short=""NSA"" last_updated=""2012-04-13 08:53:00-05"" popularity=""78"" notes=""Handbook of Methods - (https://www.bls.gov/opub/hom/pdf/homch17.pdf) Understanding the CPI: Frequently Asked Questions - (https://stats.bls.gov:80/cpi/cpifaq.htm)""/>
+  <series id=""CPIAUCSL"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Consumer Price Index for All Urban Consumers: All Items"" observation_start=""1947-01-01"" observation_end=""2012-03-01"" frequency=""Monthly"" frequency_short=""M"" units=""Index 1982-84=100"" units_short=""Index 1982-84=100"" seasonal_adjustment=""Seasonally Adjusted"" seasonal_adjustment_short=""SA"" last_updated=""2012-04-13 08:49:51-05"" popularity=""100"" notes=""Handbook of Methods - (https://www.bls.gov/opub/hom/pdf/homch17.pdf) Understanding the CPI: Frequently Asked Questions - (https://stats.bls.gov:80/cpi/cpifaq.htm)""/>
   <series id=""CPIEDUNS"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Consumer Price Index for All Urban Consumers: Education &amp; Communication"" observation_start=""1993-01-01"" observation_end=""2012-03-01"" frequency=""Monthly"" frequency_short=""M"" units=""Index December 1997=100"" units_short=""Index Dec 1997=100"" seasonal_adjustment=""Not Seasonally Adjusted"" seasonal_adjustment_short=""NSA"" last_updated=""2012-04-13 08:55:23-05"" popularity=""18""/>
 </seriess>";
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var series = await fred.GetReleaseSeriesAsync(10);
-            var expectedUrl = "http://api.stlouisfed.org/fred/release/series?api_key=key&release_id=10" + RealtimeNow + "&limit=1000&offset=0&order_by=series_id&sort_order=asc&filter_variable=&filter_value=";
+            var expectedUrl = "https://api.stlouisfed.org/fred/release/series?api_key=key&release_id=10" + RealtimeNow + "&limit=1000&offset=0&order_by=series_id&sort_order=asc&filter_variable=&filter_value=";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(5, series.Count());
         }
@@ -201,12 +201,12 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
         {
             const string response = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <sources realtime_start=""2012-04-26"" realtime_end=""2012-04-26"">
-  <source id=""22"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""U.S. Department of Labor: Bureau of Labor Statistics"" link=""http://www.bls.gov/""/>
+  <source id=""22"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""U.S. Department of Labor: Bureau of Labor Statistics"" link=""https://www.bls.gov/""/>
 </sources>";
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var sources = await fred.GetReleaseSourcesAsync(10);
-            var expectedUrl = "http://api.stlouisfed.org/fred/release/sources?api_key=key&release_id=10" + RealtimeNow;
+            var expectedUrl = "https://api.stlouisfed.org/fred/release/sources?api_key=key&release_id=10" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(1, sources.Count());
         }
@@ -217,12 +217,12 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             const string response =
                 @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <seriess realtime_start=""2012-04-26"" realtime_end=""2012-04-26"">
-  <series id=""CPIAUCNS"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Consumer Price Index for All Urban Consumers: All Items"" observation_start=""1913-01-01"" observation_end=""2012-03-01"" frequency=""Monthly"" frequency_short=""M"" units=""Index 1982-84=100"" units_short=""Index 1982-84=100"" seasonal_adjustment=""Not Seasonally Adjusted"" seasonal_adjustment_short=""NSA"" last_updated=""2012-04-13 08:53:00-05"" popularity=""78"" notes=""Handbook of Methods - (http://www.bls.gov/opub/hom/pdf/homch17.pdf) Understanding the CPI: Frequently Asked Questions - (http://stats.bls.gov:80/cpi/cpifaq.htm)""/>
+  <series id=""CPIAUCNS"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Consumer Price Index for All Urban Consumers: All Items"" observation_start=""1913-01-01"" observation_end=""2012-03-01"" frequency=""Monthly"" frequency_short=""M"" units=""Index 1982-84=100"" units_short=""Index 1982-84=100"" seasonal_adjustment=""Not Seasonally Adjusted"" seasonal_adjustment_short=""NSA"" last_updated=""2012-04-13 08:53:00-05"" popularity=""78"" notes=""Handbook of Methods - (https://www.bls.gov/opub/hom/pdf/homch17.pdf) Understanding the CPI: Frequently Asked Questions - (https://stats.bls.gov:80/cpi/cpifaq.htm)""/>
 </seriess>";
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var series = await fred.GetSeriesAsync("CPIAUCNS");
-            var expectedUrl = "http://api.stlouisfed.org/fred/series?api_key=key&series_id=CPIAUCNS" + RealtimeNow;
+            var expectedUrl = "https://api.stlouisfed.org/fred/series?api_key=key&series_id=CPIAUCNS" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual("CPIAUCNS", series.Id);
             Assert.AreEqual("Consumer Price Index for All Urban Consumers: All Items", series.Title);
@@ -236,7 +236,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var expectedDate = new DateTime(2012, 4, 13, 13, 53, 0, DateTimeKind.Utc);
             Assert.AreEqual(expectedDate.ToLocalTime(), series.LastUpdated);
             Assert.AreEqual(78, series.Popularity);
-            Assert.AreEqual("Handbook of Methods - (http://www.bls.gov/opub/hom/pdf/homch17.pdf) Understanding the CPI: Frequently Asked Questions - (http://stats.bls.gov:80/cpi/cpifaq.htm)", series.Notes);
+            Assert.AreEqual("Handbook of Methods - (https://www.bls.gov/opub/hom/pdf/homch17.pdf) Understanding the CPI: Frequently Asked Questions - (https://stats.bls.gov:80/cpi/cpifaq.htm)", series.Notes);
         }
 
         [Test]
@@ -251,7 +251,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var fred = new Fred("key", downloader);
             var categories = await fred.GetSeriesCategoriesAsync("EXJPUS");
             var expectedUrl =
-                "http://api.stlouisfed.org/fred/series/categories?api_key=key&series_id=EXJPUS" + RealtimeNow;
+                "https://api.stlouisfed.org/fred/series/categories?api_key=key&series_id=EXJPUS" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(2, categories.Count());
         }
@@ -261,17 +261,17 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
         {
             const string response = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <releases realtime_start=""2012-04-26"" realtime_end=""2012-04-26"">
-  <release id=""15"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.5 Foreign Exchange Rates"" press_release=""true"" link=""http://www.federalreserve.gov/releases/g5/""/>
+  <release id=""15"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.5 Foreign Exchange Rates"" press_release=""true"" link=""https://www.federalreserve.gov/releases/g5/""/>
 </releases>";
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var release = await fred.GetSeriesReleaseAsync("EXJPUS");
-            var expectedUrl = "http://api.stlouisfed.org/fred/series/release?api_key=key&series_id=EXJPUS" + RealtimeNow;
+            var expectedUrl = "https://api.stlouisfed.org/fred/series/release?api_key=key&series_id=EXJPUS" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(15, release.Id);
             Assert.AreEqual("G.5 Foreign Exchange Rates", release.Name);
             Assert.AreEqual(true, release.PressRelease);
-            Assert.AreEqual("http://www.federalreserve.gov/releases/g5/", release.Link);
+            Assert.AreEqual("https://www.federalreserve.gov/releases/g5/", release.Link);
             Assert.AreEqual("", release.Notes);
             Assert.AreEqual(new DateTime(2012, 4, 26), release.RealtimeStart);
             Assert.AreEqual(new DateTime(2012, 4, 26), release.RealtimeEnd);
@@ -289,7 +289,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var series = await fred.GetSeriesSearchAsync("money stock");
-            var expectedUrl = "http://api.stlouisfed.org/fred/series/search?api_key=key" + RealtimeNow + "&limit=1000&offset=0&order_by=search_rank&sort_order=asc&filter_variable=&filter_value=&search_type=full_text&search_text=money%20stock";
+            var expectedUrl = "https://api.stlouisfed.org/fred/series/search?api_key=key" + RealtimeNow + "&limit=1000&offset=0&order_by=search_rank&sort_order=asc&filter_variable=&filter_value=&search_type=full_text&search_text=money%20stock";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(3, series.Count());
         }
@@ -300,15 +300,15 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf""/>
             const string response =@"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <seriess realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" filter_variable=""geography"" filter_value=""all"" order_by=""last_updated"" sort_order=""desc"" count=""45314"" offset=""0"" limit=""100"">
   <series id=""STLFSI"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""St. Louis Financial Stress Index"" observation_start=""1993-12-31"" observation_end=""2012-04-20"" frequency=""Weekly, Ending Friday"" frequency_short=""W"" units=""Index"" units_short=""Index"" seasonal_adjustment=""Not Applicable"" seasonal_adjustment_short=""NA"" last_updated=""2012-04-26 10:00:17-05"" popularity=""92"" notes=""To obtain detailed information regarding the construction of the St. Louis Financial Stress Index, please see the online appendix at
-http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
+https://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
  As of 07/15/2010 the Vanguard Financial Exchange-Traded Fund series has been replaced with the S&amp;P 500 Financials Index. This change was made to facilitate a more timely and automated updating of the FSI.  Switching from the Vanguard series to the S&amp;P series produced no meaningful change in the index.""/>
-  <series id=""NFINCP"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Commercial Paper of Nonfinancial Companies"" observation_start=""2001-01-03"" observation_end=""2012-04-25"" frequency=""Weekly, Ending Wednesday"" frequency_short=""W"" units=""Billions of Dollars"" units_short=""Bil. of $"" seasonal_adjustment=""Seasonally Adjusted"" seasonal_adjustment_short=""SA"" last_updated=""2012-04-26 09:31:21-05"" popularity=""35"" notes=""For more information, please refer to http://www.federalreserve.gov/releases/cp/about.htm""/>
-  <series id=""FFINCP"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Foreign Financial Commercial Paper Outstanding"" observation_start=""2001-01-03"" observation_end=""2012-04-25"" frequency=""Weekly, Ending Wednesday"" frequency_short=""W"" units=""Billions of Dollars"" units_short=""Bil. of $"" seasonal_adjustment=""Seasonally Adjusted"" seasonal_adjustment_short=""SA"" last_updated=""2012-04-26 09:31:20-05"" popularity=""27"" notes=""For more information, please refer to http://www.federalreserve.gov/releases/cp/about.htm""/>
+  <series id=""NFINCP"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Commercial Paper of Nonfinancial Companies"" observation_start=""2001-01-03"" observation_end=""2012-04-25"" frequency=""Weekly, Ending Wednesday"" frequency_short=""W"" units=""Billions of Dollars"" units_short=""Bil. of $"" seasonal_adjustment=""Seasonally Adjusted"" seasonal_adjustment_short=""SA"" last_updated=""2012-04-26 09:31:21-05"" popularity=""35"" notes=""For more information, please refer to https://www.federalreserve.gov/releases/cp/about.htm""/>
+  <series id=""FFINCP"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" title=""Foreign Financial Commercial Paper Outstanding"" observation_start=""2001-01-03"" observation_end=""2012-04-25"" frequency=""Weekly, Ending Wednesday"" frequency_short=""W"" units=""Billions of Dollars"" units_short=""Bil. of $"" seasonal_adjustment=""Seasonally Adjusted"" seasonal_adjustment_short=""SA"" last_updated=""2012-04-26 09:31:20-05"" popularity=""27"" notes=""For more information, please refer to https://www.federalreserve.gov/releases/cp/about.htm""/>
 </seriess>";
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var series = await fred.GetSeriesUpdatesAsync();
-            var expectedUrl = "http://api.stlouisfed.org/fred/series/updates?api_key=key" + RealtimeNow + "&limit=100&offset=0&filter_value=all";
+            var expectedUrl = "https://api.stlouisfed.org/fred/series/updates?api_key=key" + RealtimeNow + "&limit=100&offset=0&filter_value=all";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(3, series.Count());
         }
@@ -329,7 +329,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var dates = await fred.GetSeriesVintageDatesAsync("EXJPUS");
-            const string expectedUrl = "http://api.stlouisfed.org/fred/series/vintagedates?api_key=key&series_id=EXJPUS&realtime_start=1776-07-04&realtime_end=9999-12-31&limit=10000&offset=0&sort_order=asc";
+            const string expectedUrl = "https://api.stlouisfed.org/fred/series/vintagedates?api_key=key&series_id=EXJPUS&realtime_start=1776-07-04&realtime_end=9999-12-31&limit=10000&offset=0&sort_order=asc";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(7, dates.Count());
         }
@@ -339,18 +339,18 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
         {
             const string response = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <sources realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" order_by=""source_id"" sort_order=""asc"" count=""39"" offset=""0"" limit=""1000"">
-  <source id=""1"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Board of Governors of the Federal Reserve System"" link=""http://www.federalreserve.gov/""/>
-  <source id=""3"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Federal Reserve Bank of Philadelphia"" link=""http://www.philadelphiafed.org/""/>
-  <source id=""4"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Federal Reserve Bank of St. Louis"" link=""http://www.stlouisfed.org/""/>
-  <source id=""6"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Federal Financial Institutions Examination Council"" link=""http://www.ffiec.gov/""/>
-  <source id=""11"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Dow Jones &amp; Company"" link=""http://www.dowjones.com""/>
-  <source id=""13"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Institute for Supply Management"" link=""http://www.ism.ws/""/>
+  <source id=""1"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Board of Governors of the Federal Reserve System"" link=""https://www.federalreserve.gov/""/>
+  <source id=""3"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Federal Reserve Bank of Philadelphia"" link=""https://www.philadelphiafed.org/""/>
+  <source id=""4"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Federal Reserve Bank of St. Louis"" link=""https://www.stlouisfed.org/""/>
+  <source id=""6"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Federal Financial Institutions Examination Council"" link=""https://www.ffiec.gov/""/>
+  <source id=""11"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Dow Jones &amp; Company"" link=""https://www.dowjones.com""/>
+  <source id=""13"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Institute for Supply Management"" link=""https://www.ism.ws/""/>
   <source id=""14"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Thomson Reuters/University of Michigan"" link=""https://customers.reuters.com/community/university/default.aspx""/>
 </sources>";
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var sources = await fred.GetSourcesAsync();
-            var expectedUrl = "http://api.stlouisfed.org/fred/sources?api_key=key" + RealtimeNow + "&limit=1000&offset=0&order_by=source_id&sort_order=asc";
+            var expectedUrl = "https://api.stlouisfed.org/fred/sources?api_key=key" + RealtimeNow + "&limit=1000&offset=0&order_by=source_id&sort_order=asc";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(7, sources.Count());
         }
@@ -360,18 +360,18 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
         {
             const string response = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <sources realtime_start=""2012-04-26"" realtime_end=""2012-04-26"">
-  <source id=""1"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Board of Governors of the Federal Reserve System"" link=""http://www.federalreserve.gov/""/>
+  <source id=""1"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""Board of Governors of the Federal Reserve System"" link=""https://www.federalreserve.gov/""/>
 </sources>";
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var source = await fred.GetSourceAsync(1);
-            var expectedUrl = "http://api.stlouisfed.org/fred/source?api_key=key&source_id=1" + RealtimeNow;
+            var expectedUrl = "https://api.stlouisfed.org/fred/source?api_key=key&source_id=1" + RealtimeNow;
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(1, source.Id);
             Assert.AreEqual(new DateTime(2012, 4, 26), source.RealtimeStart);
             Assert.AreEqual(new DateTime(2012, 4, 26), source.RealtimeEnd);
             Assert.AreEqual("Board of Governors of the Federal Reserve System", source.Name);
-            Assert.AreEqual("http://www.federalreserve.gov/", source.Link);
+            Assert.AreEqual("https://www.federalreserve.gov/", source.Link);
             Assert.AreEqual(string.Empty, source.Notes);
         }
 
@@ -380,16 +380,16 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
         {
             const string response = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <releases realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" order_by=""release_id"" sort_order=""asc"" count=""26"" offset=""0"" limit=""1000"">
-<release id=""13"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.17 Industrial Production and Capacity Utilization"" press_release=""true"" link=""http://www.federalreserve.gov/releases/g17/""/>
-<release id=""14"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.19 Consumer Credit"" press_release=""true"" link=""http://www.federalreserve.gov/releases/g19/""/>
-<release id=""15"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.5 Foreign Exchange Rates"" press_release=""true"" link=""http://www.federalreserve.gov/releases/g5/""/>
-<release id=""17"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.10 Foreign Exchange Rates"" press_release=""true"" link=""http://www.federalreserve.gov/releases/h10/""/>
-<release id=""18"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.15 Selected Interest Rates"" press_release=""true"" link=""http://www.federalreserve.gov/releases/h15/""/>
+<release id=""13"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.17 Industrial Production and Capacity Utilization"" press_release=""true"" link=""https://www.federalreserve.gov/releases/g17/""/>
+<release id=""14"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.19 Consumer Credit"" press_release=""true"" link=""https://www.federalreserve.gov/releases/g19/""/>
+<release id=""15"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""G.5 Foreign Exchange Rates"" press_release=""true"" link=""https://www.federalreserve.gov/releases/g5/""/>
+<release id=""17"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.10 Foreign Exchange Rates"" press_release=""true"" link=""https://www.federalreserve.gov/releases/h10/""/>
+<release id=""18"" realtime_start=""2012-04-26"" realtime_end=""2012-04-26"" name=""H.15 Selected Interest Rates"" press_release=""true"" link=""https://www.federalreserve.gov/releases/h15/""/>
 </releases>";
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var releases = await fred.GetSourceReleasesAsync(1);
-            var expectedUrl = "http://api.stlouisfed.org/fred/source/releases?api_key=key&source_id=1" + RealtimeNow + "&limit=1000&offset=0&order_by=release_id&sort_order=asc";
+            var expectedUrl = "https://api.stlouisfed.org/fred/source/releases?api_key=key&source_id=1" + RealtimeNow + "&limit=1000&offset=0&order_by=release_id&sort_order=asc";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(5, releases.Count());
         }
@@ -409,7 +409,7 @@ http://research.stlouisfed.org/publications/net/NETJan2010Appendix.pdf
             var downloader = new MockDownloader(response);
             var fred = new Fred("key", downloader);
             var observations = await fred.GetSeriesObservationsAsync("EXJPUS");
-            var expectedUrl = "http://api.stlouisfed.org/fred/series/observations?api_key=key&series_id=EXJPUS" + RealtimeNow + "&limit=100000&offset=0&sort_order=asc&observation_start=1776-07-04&observation_end=9999-12-31&units=lin&frequency=&aggregation_method=avg&output_type=1&file_type=xml&vintage_dates=";
+            var expectedUrl = "https://api.stlouisfed.org/fred/series/observations?api_key=key&series_id=EXJPUS" + RealtimeNow + "&limit=100000&offset=0&sort_order=asc&observation_start=1776-07-04&observation_end=9999-12-31&units=lin&frequency=&aggregation_method=avg&output_type=1&file_type=xml&vintage_dates=";
             Assert.AreEqual(expectedUrl, downloader.Url);
             Assert.AreEqual(6, observations.Count());
         }
