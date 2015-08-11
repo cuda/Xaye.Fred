@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Xaye.Fred
 {
@@ -11,6 +10,7 @@ namespace Xaye.Fred
     public class Release : Item, IEnumerable<Series>
     {
         #region OrderBy enum
+
         /// <summary>
         /// What to order releases by.
         /// </summary>
@@ -25,32 +25,48 @@ namespace Xaye.Fred
 
         #endregion
 
-        private volatile List<Series> _series;
+        private readonly Lazy<List<Series>> _series;
 
         internal Release(Fred fred) : base(fred)
         {
+            _series = new Lazy<List<Series>>(
+                () =>
+                {
+                    var series = (List<Series>) Fred.GetReleaseSeries(Id, RealtimeStart, RealtimeEnd);
+                    var count = series.Count;
+                    var call = 1;
+                    while (count == CallLimit)
+                    {
+                        var more = (List<Series>) Fred.GetReleaseSeries(Id, DateTime.Today, DateTime.Today, CallLimit, call* CallLimit);
+                        series.AddRange(more);
+                        count = more.Count;
+                        call++;
+                    }
+                    return series;
+                }
+                );
         }
 
         /// <summary>
         /// The release's id.
         /// </summary>
         public int Id { get; set; }
-        
+
         /// <summary>
         /// The release's name.
         /// </summary>
         public string Name { get; set; }
-        
+
         /// <summary>
         /// A link to information about the release.
         /// </summary>
         public string Link { get; set; }
-       
+
         /// <summary>
         /// Does the link provide a press release.
         /// </summary>
         public bool PressRelease { get; set; }
-       
+
         /// <summary>
         /// The start of the real-time period.
         /// </summary>
@@ -65,36 +81,7 @@ namespace Xaye.Fred
         /// Provides an enumerator over the
         /// <see cref="Series"/> in the release.
         /// </summary>
-        public IEnumerable<Series> Series
-        {
-            get
-            {
-                if (_series == null)
-                {
-                    lock (Lock)
-                    {
-                        if (_series == null)
-                        {
-                            const int limit = 1000;
-                            _series = (List<Series>) Fred.GetReleaseSeries(Id, RealtimeStart, RealtimeEnd, limit, 0);
-                            var count = _series.Count;
-                            var call = 1;
-                            while (count == limit)
-                            {
-                                var more = (List<Series>) Fred.GetReleaseSeries(Id, DateTime.Today, DateTime.Today, limit, call*limit);
-                                _series.AddRange(more);
-                                count = more.Count;
-                                call++;
-                            }
-                        }
-                    }
-                }
-
-                return _series;
-            }
-        }
-
-        #region IEnumerable<Series> Members
+        public IEnumerable<Series> Series => _series.Value;
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -113,7 +100,5 @@ namespace Xaye.Fred
         {
             return GetEnumerator();
         }
-
-        #endregion
     }
 }

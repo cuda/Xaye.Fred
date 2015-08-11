@@ -7,18 +7,14 @@
     /// </summary>
     public abstract class Item
     {
-        private readonly object _lock = new object();
-
-        protected object Lock
-        {
-            get { return _lock; }
-        }
+        protected static int CallLimit = 1000;
 
         protected Item(Fred fred)
         {
             Fred = fred;
         }
 
+        protected object Lock { get; } = new object();
         internal Fred Fred { get; set; }
 
         /// <summary>

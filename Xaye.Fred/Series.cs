@@ -14,8 +14,6 @@ namespace Xaye.Fred
     /// </remarks>
     public class Series : Item, IEnumerable<Observation>
     {
-        #region FilterBy enum
-
         /// <summary>
         ///   What to filter by when retrieving series. Defaults to FilterBy.None.
         /// </summary>
@@ -26,10 +24,6 @@ namespace Xaye.Fred
             Units,
             SeasonalAdjustment
         }
-
-        #endregion
-
-        #region OrderBy enum
 
         /// <summary>
         ///   When retrieving data, what to order the data by. Defaults to OrderBy.SeriesId.
@@ -49,10 +43,6 @@ namespace Xaye.Fred
             Popularity,
             SearchRank
         }
-
-        #endregion
-
-        #region UpdateFilterBy enum
 
         /// <summary>
         ///   What to filter by when retrieving series updates. Defaults to FilterBy.All.
@@ -75,14 +65,48 @@ namespace Xaye.Fred
             Regional
         }
 
-        #endregion
-
-        private volatile IEnumerable<Category> _categories;
-        private volatile List<Observation> _data;
-        private volatile Release _release;
+        private readonly Lazy<IEnumerable<Category>> _categories;
+        private volatile Lazy<List<Observation>> _data;
+        private volatile Lazy<Release> _release;
 
         internal Series(Fred fred) : base(fred)
         {
+            _categories = new Lazy<IEnumerable<Category>>(() => UseRealtimeFields
+                ? Fred.GetSeriesCategories(Id, RealtimeStart, RealtimeEnd)
+                : Fred.GetSeriesCategories(Id));
+
+            _release = new Lazy<Release>(() => UseRealtimeFields
+                ? Fred.GetSeriesRelease(Id, RealtimeStart, RealtimeEnd)
+                : Fred.GetSeriesRelease(Id));
+
+            _data = new Lazy<List<Observation>>(
+                () =>
+                {
+                    const int limit = 100000;
+                    var data = UseRealtimeFields
+                        ? (List<Observation>)
+                            Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, RealtimeStart,
+                                RealtimeEnd, Enumerable.Empty<DateTime>())
+                        : (List<Observation>)
+                            Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd);
+
+                    var count = data.Count;
+                    var call = 1;
+                    while (count == limit)
+                    {
+                        var start = UseRealtimeFields ? RealtimeStart : Fred.CstTime();
+                        var end = UseRealtimeFields ? RealtimeEnd : Fred.CstTime();
+                        var more =
+                            (List<Observation>)
+                                Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, start,
+                                    end, Enumerable.Empty<DateTime>(), limit,
+                                    call*limit);
+                        data.AddRange(more);
+                        count = more.Count;
+                        call++;
+                    }
+                    return data;
+                });
         }
 
         /// <summary>
@@ -150,99 +174,21 @@ namespace Xaye.Fred
         /// <summary>
         ///   Gets the release the series belongs to. Lazily loaded.
         /// </summary>
-        public Release Release
-        {
-            get
-            {
-                if (_release == null)
-                {
-                    lock (Lock)
-                    {
-                        if (_release == null)
-                        {
-                            _release = UseRealtimeFields
-                                           ? Fred.GetSeriesRelease(Id, RealtimeStart, RealtimeEnd)
-                                           : Fred.GetSeriesRelease(Id);
-                        }
-                    }
-                }
-
-                return _release;
-            }
-        }
+        public Release Release => _release.Value;
 
         /// <summary>
         ///   Gets the categories the series belongs to. Lazily loaded.
         /// </summary>
         /// <remarks>
         /// </remarks>
-        public IEnumerable<Category> Categories
-        {
-            get
-            {
-                if (_categories == null)
-                {
-                    lock (Lock)
-                    {
-                        if (_categories == null)
-                        {
-                            _categories = UseRealtimeFields
-                                              ? Fred.GetSeriesCategories(Id, RealtimeStart, RealtimeEnd)
-                                              : Fred.GetSeriesCategories(Id);
-                        }
-                    }
-                }
-                return _categories;
-            }
-        }
+        public IEnumerable<Category> Categories => _categories.Value;
 
         /// <summary>
         ///   Gets the series observations. Lazily loaded.
         /// </summary>
         /// <remarks>
         /// </remarks>
-        public IEnumerable<Observation> Observations
-        {
-            get
-            {
-                if (_data == null)
-                {
-                    lock (Lock)
-                    {
-                        if (_data == null)
-                        {
-                            const int limit = 100000;
-                            _data = UseRealtimeFields
-                                        ? (List<Observation>)
-                                          Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, RealtimeStart,
-                                                                     RealtimeEnd, Enumerable.Empty<DateTime>())
-                                        : (List<Observation>)
-                                          Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd);
-
-                            var count = _data.Count;
-                            var call = 1;
-                            while (count == limit)
-                            {
-                                var start = UseRealtimeFields ? RealtimeStart : Fred.CstTime();
-                                var end = UseRealtimeFields ? RealtimeEnd : Fred.CstTime();
-                                var more =
-                                    (List<Observation>)
-                                    Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, start,
-                                                               end, Enumerable.Empty<DateTime>(), limit,
-                                                               call*limit);
-                                _data.AddRange(more);
-                                count = more.Count;
-                                call++;
-                            }
-                        }
-                    }
-                }
-
-                return _data;
-            }
-        }
-
-        #region IEnumerable<Observation> Members
+        public IEnumerable<Observation> Observations => _data.Value;
 
         /// <summary>
         ///   Returns an enumerator that iterates through the collection.
@@ -265,7 +211,5 @@ namespace Xaye.Fred
         {
             return GetEnumerator();
         }
-
-        #endregion
     }
 }

@@ -6,20 +6,20 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Xml.Linq;
+using static System.String;
 
 namespace Xaye.Fred
 {
     /// <summary>
     /// A synchronous API to the Federal Reserve Economic Data (FRED).
     /// </summary>
-    /// <remarks>We'll be adding an asynchronous API once .NET 4.5 is released.</remarks>
     /// <remarks>See http://api.stlouisfed.org/docs/fred/realtime_period.html for information 
     /// about real-time periods.</remarks>  
-    public partial class Fred
+    public class Fred
     {
         private readonly IDictionary<int, Category> _categoryCache = new Dictionary<int, Category>();
         private readonly IUrlDownloader _downloader;
-        private readonly string _key = string.Empty;
+        private readonly string _key;
         private readonly IDictionary<string, Series> _seriesCache = new Dictionary<string, Series>();
         private readonly bool _cache = true;
 
@@ -44,14 +44,14 @@ namespace Xaye.Fred
         public Fred(string key, IUrlDownloader downloader)
         {
             var trimmed = key.Trim();
-            if (string.IsNullOrWhiteSpace(trimmed))
+            if (IsNullOrWhiteSpace(trimmed))
             {
-                throw new ArgumentNullException("key", "The FRED key cannot be null or an empty string.");
+                throw new ArgumentNullException(nameof(key), "The FRED key cannot be null or an empty string.");
             }
 
             if (downloader == null)
             {
-                throw new ArgumentNullException("downloader", "The downloader cannot be null.");
+                throw new ArgumentNullException(nameof(downloader), "The downloader cannot be null.");
             }
 
             _key = trimmed;
@@ -82,7 +82,7 @@ namespace Xaye.Fred
                                                 Release.OrderBy orderBy = Release.OrderBy.ReleaseId,
                                                 SortOrder order = SortOrder.Ascending)
         {
-            var url = String.Format(Urls.Releases, _key, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.Releases, _key, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString(), limit, offset, Extensions.ToString(orderBy),
                                     Extensions.ToString(order));
 
@@ -117,7 +117,7 @@ namespace Xaye.Fred
                                   Release.OrderBy orderBy = Release.OrderBy.ReleaseId,
                                   SortOrder order = SortOrder.Ascending)
         {
-            var url = String.Format(Urls.Release, _key, releaseId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.Release, _key, releaseId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString());
 
             var element = GetRoot(url).Elements("release").First();
@@ -153,7 +153,7 @@ namespace Xaye.Fred
                                                          SortOrder order = SortOrder.Ascending,
                                                          bool includeReleaseWithNoData = false)
         {
-            var url = String.Format(Urls.ReleasesDates, _key, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.ReleasesDates, _key, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString(), limit, offset, Extensions.ToString(orderBy),
                                     Extensions.ToString(order),
                                     includeReleaseWithNoData.ToString(CultureInfo.GetCultureInfo("en-US")).
@@ -199,7 +199,7 @@ namespace Xaye.Fred
                                                         SortOrder order = SortOrder.Ascending,
                                                         bool includeReleaseWithNoData = false)
         {
-            var url = String.Format(Urls.ReleaseDates, _key, releaseId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.ReleaseDates, _key, releaseId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString(), limit, offset, Extensions.ToString(order),
                                     includeReleaseWithNoData.ToString(CultureInfo.GetCultureInfo("en-US")).
                                         ToLowerInvariant());
@@ -245,7 +245,7 @@ namespace Xaye.Fred
                                                     Series.FilterBy filter = Series.FilterBy.None,
                                                     string filterValue = "")
         {
-            var url = String.Format(Urls.ReleaseSeries, _key, releaseId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.ReleaseSeries, _key, releaseId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString(), limit, offset, Extensions.ToString(orderBy),
                                     Extensions.ToString(order), Extensions.ToString(filter), filterValue);
 
@@ -273,7 +273,7 @@ namespace Xaye.Fred
         /// <returns>The sources for a release of economic data.</returns>
         public IEnumerable<Source> GetReleaseSources(int releaseId, DateTime realtimeStart, DateTime realtimeEnd)
         {
-            var url = String.Format(Urls.ReleaseSources, _key, releaseId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.ReleaseSources, _key, releaseId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString());
 
             return CreateSources(url);
@@ -302,7 +302,7 @@ namespace Xaye.Fred
                 return _categoryCache[id];
             }
 
-            var url = String.Format(Urls.Category, _key, id);
+            var url = Format(Urls.Category, _key, id);
 
             var element = GetRoot(url).Elements("category").First();
             return CreateCategory(element);
@@ -319,7 +319,7 @@ namespace Xaye.Fred
         /// <returns>The related categories for a category.</returns>
         public IEnumerable<Category> GetCategoryRelated(int categoryId, DateTime realtimeStart, DateTime realtimeEnd)
         {
-            var url = String.Format(Urls.CategoryRelated, _key, categoryId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.CategoryRelated, _key, categoryId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString());
 
             return CreateCategories(url);
@@ -348,7 +348,7 @@ namespace Xaye.Fred
         /// <returns>The child categories for a specified parent category</returns>
         public IEnumerable<Category> GetCategoryChildern(int categoryId, DateTime realtimeStart, DateTime realtimeEnd)
         {
-            var url = String.Format(Urls.CategoryChildern, _key, categoryId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.CategoryChildern, _key, categoryId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString());
 
             return CreateCategories(url);
@@ -386,7 +386,7 @@ namespace Xaye.Fred
                                                      Series.FilterBy filter = Series.FilterBy.None,
                                                      string filterValue = "")
         {
-            var url = String.Format(Urls.CategorySeries, _key, categoryId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.CategorySeries, _key, categoryId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString(), limit, offset, Extensions.ToString(orderBy),
                                     Extensions.ToString(order), Extensions.ToString(filter), filterValue);
             return CreateSeries(url);
@@ -412,7 +412,7 @@ namespace Xaye.Fred
         /// <returns>An economic data series.</returns>
         public Series GetSeries(string seriesId, DateTime realtimeStart, DateTime realtimeEnd)
         {
-            var url = String.Format(Urls.Series, _key, seriesId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.Series, _key, seriesId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString());
 
             var element = GetRoot(url).Elements("series").First();
@@ -439,7 +439,7 @@ namespace Xaye.Fred
         /// <returns>The categories for an economic data series.</returns>
         public IEnumerable<Category> GetSeriesCategories(string seriesId, DateTime realtimeStart, DateTime realtimeEnd)
         {
-            var url = String.Format(Urls.SeriesCategories, _key, seriesId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.SeriesCategories, _key, seriesId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString());
 
             return CreateCategories(url);
@@ -465,7 +465,7 @@ namespace Xaye.Fred
         /// <returns>The release for an economic data series.</returns>
         public Release GetSeriesRelease(string seriesId, DateTime realtimeStart, DateTime realtimeEnd)
         {
-            var url = String.Format(Urls.SeriesRelease, _key, seriesId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.SeriesRelease, _key, seriesId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString());
 
             var element = GetRoot(url).Elements("release").First();
@@ -515,7 +515,7 @@ namespace Xaye.Fred
                                                    Series.FilterBy filter = Series.FilterBy.None,
                                                    string filterValue = "")
         {
-            var url = String.Format(Urls.SeriesSearch, _key, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.SeriesSearch, _key, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString(), limit, offset, Extensions.ToString(orderBy),
                                     Extensions.ToString(order), Extensions.ToString(filter),
                                     filterValue, Extensions.ToString(type), Uri.EscapeUriString(searchText));
@@ -564,7 +564,7 @@ namespace Xaye.Fred
                                                     int offset = 0,
                                                     Series.UpdateFilterBy filter = Series.UpdateFilterBy.All)
         {
-            var url = String.Format(Urls.SeriesUpdates, _key, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.SeriesUpdates, _key, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString(), limit, offset, Extensions.ToString(filter));
             return CreateSeries(url);
         }
@@ -598,7 +598,7 @@ namespace Xaye.Fred
                                                            int offset = 0,
                                                            SortOrder order = SortOrder.Ascending)
         {
-            var url = String.Format(Urls.SeriesVintageDates, _key, seriesId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.SeriesVintageDates, _key, seriesId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString(), limit, offset,
                                     Extensions.ToString(order));
 
@@ -665,7 +665,7 @@ namespace Xaye.Fred
                                               AggregationMethod method = AggregationMethod.Average,
                                               OutputType outputType = OutputType.RealTime)
         {
-            var vintageString = vintageDates.Aggregate(string.Empty,
+            var vintageString = vintageDates.Aggregate(Empty,
                                                        (current, vintageDate) =>
                                                        current + (vintageDate.ToFredDateString() + ","));
             if (vintageString.Length > 0)
@@ -673,9 +673,9 @@ namespace Xaye.Fred
                 vintageString = vintageString.Substring(0, vintageString.Length - 1);
             }
 
-            var realtimeStartStr = (vintageString.Length == 0) ? realtimeStart.ToFredDateString() : string.Empty;
-            var realtimeEndStr = (vintageString.Length == 0) ? realtimeEnd.ToFredDateString() : string.Empty;
-            var url = String.Format(Urls.SeriesObservations, _key, seriesId, realtimeStartStr,
+            var realtimeStartStr = (vintageString.Length == 0) ? realtimeStart.ToFredDateString() : Empty;
+            var realtimeEndStr = (vintageString.Length == 0) ? realtimeEnd.ToFredDateString() : Empty;
+            var url = Format(Urls.SeriesObservations, _key, seriesId, realtimeStartStr,
                                     realtimeEndStr, limit, offset, Extensions.ToString(order),
                                     observationStart.ToFredDateString(),
                                     observationEnd.ToFredDateString(),
@@ -685,7 +685,8 @@ namespace Xaye.Fred
 
             try
             {
-                if (fileType != FileType.Xml && !Path.GetExtension(filename).Equals(".zip", StringComparison.OrdinalIgnoreCase))
+                var extension = Path.GetExtension(filename);
+                if (extension != null && (fileType != FileType.Xml && !extension.Equals(".zip", StringComparison.OrdinalIgnoreCase)))
                 {
                     filename += ".zip";
                 }
@@ -695,7 +696,8 @@ namespace Xaye.Fred
             {
                 var response = (HttpWebResponse) exp.Response;
                 var buffer = new byte[response.ContentLength];
-                response.GetResponseStream().Read(buffer, 0, buffer.Length);
+                var stream = response.GetResponseStream();
+                stream?.Read(buffer, 0, buffer.Length);
                 var xml = Encoding.UTF8.GetString(buffer);
                 var start = xml.IndexOf("message=", StringComparison.OrdinalIgnoreCase);
                 if (start < 0)
@@ -783,7 +785,7 @@ namespace Xaye.Fred
                                                               AggregationMethod method = AggregationMethod.Average,
                                                               OutputType outputType = OutputType.RealTime)
         {
-            var vintageString = vintageDates.Aggregate(string.Empty,
+            var vintageString = vintageDates.Aggregate(Empty,
                                                        (current, vintageDate) =>
                                                        current + (vintageDate.ToFredDateString() + ","));
             if (vintageString.Length > 0)
@@ -791,9 +793,9 @@ namespace Xaye.Fred
                 vintageString = vintageString.Substring(0, vintageString.Length - 1);
             }
 
-            var realtimeStartStr = (vintageString.Length == 0) ? realtimeStart.ToFredDateString() : string.Empty;
-            var realtimeEndStr = (vintageString.Length == 0) ? realtimeEnd.ToFredDateString() : string.Empty;
-            var url = String.Format(Urls.SeriesObservations, _key, seriesId, realtimeStartStr,
+            var realtimeStartStr = (vintageString.Length == 0) ? realtimeStart.ToFredDateString() : Empty;
+            var realtimeEndStr = (vintageString.Length == 0) ? realtimeEnd.ToFredDateString() : Empty;
+            var url = Format(Urls.SeriesObservations, _key, seriesId, realtimeStartStr,
                                     realtimeEndStr, limit, offset, Extensions.ToString(order),
                                     observationStart.ToFredDateString(),
                                     observationEnd.ToFredDateString(),
@@ -805,7 +807,7 @@ namespace Xaye.Fred
                     {
                         var valElm = element.Attribute("value");
                         double? value = null;
-                        if (valElm != null && !string.IsNullOrWhiteSpace(valElm.Value))
+                        if (!IsNullOrWhiteSpace(valElm?.Value))
                         {
                             double dOut;
                             var success = double.TryParse(valElm.Value, out dOut);
@@ -870,7 +872,7 @@ namespace Xaye.Fred
                                               Source.OrderBy orderBy = Source.OrderBy.SourceId,
                                               SortOrder order = SortOrder.Ascending)
         {
-            var url = String.Format(Urls.Sources, _key, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.Sources, _key, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString(), limit, offset, Extensions.ToString(orderBy),
                                     Extensions.ToString(order));
 
@@ -896,7 +898,7 @@ namespace Xaye.Fred
         /// <returns>A source of economic data.</returns>
         public Source GetSource(int sourceId, DateTime realtimeStart, DateTime realtimeEnd)
         {
-            var url = String.Format(Urls.Source, _key, sourceId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.Source, _key, sourceId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString());
 
             var element = GetRoot(url).Elements("source").First();
@@ -931,7 +933,7 @@ namespace Xaye.Fred
                                                       Release.OrderBy orderBy = Release.OrderBy.ReleaseId,
                                                       SortOrder order = SortOrder.Ascending)
         {
-            var url = String.Format(Urls.SourceReleases, _key, sourceId, realtimeStart.ToFredDateString(),
+            var url = Format(Urls.SourceReleases, _key, sourceId, realtimeStart.ToFredDateString(),
                                     realtimeEnd.ToFredDateString(), limit, offset, Extensions.ToString(orderBy),
                                     Extensions.ToString(order));
 
@@ -954,7 +956,8 @@ namespace Xaye.Fred
             var response = (HttpWebResponse)exp.Response;
             if (response == null) throw exp;
             var buffer = new byte[response.ContentLength];
-            response.GetResponseStream().Read(buffer, 0, buffer.Length);
+            var responseStream = response.GetResponseStream();
+            responseStream?.Read(buffer, 0, buffer.Length);
             var xml = Encoding.UTF8.GetString(buffer);
             var start = xml.IndexOf("message=", StringComparison.OrdinalIgnoreCase);
             if (start < 0)
@@ -991,12 +994,12 @@ namespace Xaye.Fred
                            Name = element.Attribute("name").Value,
                            Link = element.Attribute("link") != null
                                       ? element.Attribute("link").Value
-                                      : string.Empty,
+                                      : Empty,
                            RealtimeStart = element.Attribute("realtime_start").Value.ToFredDate(),
                            RealtimeEnd = element.Attribute("realtime_end").Value.ToFredDate(),
                            Notes = element.Attribute("notes") != null
                                        ? element.Attribute("notes").Value
-                                       : string.Empty
+                                       : Empty
                        };
         }
 
@@ -1015,11 +1018,11 @@ namespace Xaye.Fred
                            Link =
                                element.Attribute("link") != null
                                    ? element.Attribute("link").Value
-                                   : string.Empty,
+                                   : Empty,
                            Notes =
                                element.Attribute("notes") != null
                                    ? element.Attribute("notes").Value
-                                   : string.Empty,
+                                   : Empty,
                            RealtimeStart = element.Attribute("realtime_start").Value.ToFredDate(),
                            RealtimeEnd = element.Attribute("realtime_end").Value.ToFredDate()
                        };
@@ -1060,14 +1063,14 @@ namespace Xaye.Fred
                                  LastUpdated = element.Attribute("last_updated").Value.ToFredDateTime(),
                                  Popularity =
                                      element.Attribute("popularity") != null &&
-                                     !(string.IsNullOrWhiteSpace(element.Attribute("popularity").Value))
+                                     !(IsNullOrWhiteSpace(element.Attribute("popularity").Value))
                                          ? int.Parse(element.Attribute("popularity").Value)
                                          : 0
                                  ,
                                  Notes =
                                      element.Attribute("notes") != null
                                          ? element.Attribute("notes").Value
-                                         : string.Empty
+                                         : Empty
                              };
             if(_cache)
             {
@@ -1097,7 +1100,7 @@ namespace Xaye.Fred
                                    Notes =
                                        element.Attribute("notes") != null
                                            ? element.Attribute("notes").Value
-                                           : string.Empty
+                                           : Empty
                                };
             _categoryCache.Add(id, category);
             return category;

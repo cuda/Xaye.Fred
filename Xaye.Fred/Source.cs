@@ -11,8 +11,6 @@ namespace Xaye.Fred
     /// about real-time periods.</remarks>    
     public class Source : Item, IEnumerable<Release>
     {
-        #region OrderBy enum
-
         /// <summary>
         /// When retrieving data, what to order the data by. Defaults to OrderBy.SeriesId.
         /// </summary>
@@ -24,12 +22,25 @@ namespace Xaye.Fred
             RealtimeEnd
         }
 
-        #endregion
-
-        private volatile List<Release> _releases;
+        private readonly Lazy<List<Release>> _releases;
 
         internal Source(Fred fred) : base(fred)
         {
+            _releases = new Lazy<List<Release>>(
+                () =>
+                {
+                    var releases = (List<Release>) Fred.GetSourceReleases(Id);
+                    var count = releases.Count;
+                    var call = 1;
+                    while (count == CallLimit)
+                    {
+                        var more = (List<Release>) Fred.GetSourceReleases(Id, DateTime.Today, DateTime.Today, CallLimit, call*CallLimit);
+                        releases.AddRange(more);
+                        count = more.Count;
+                        call++;
+                    }
+                    return releases;
+                });
         }
 
         /// <summary>
@@ -61,36 +72,7 @@ namespace Xaye.Fred
         /// Provides an enumerator over the
         /// <see cref="Release"/> by the source.
         /// </summary>
-        public IEnumerable<Release> Releases
-        {
-            get
-            {
-                if (_releases == null)
-                {
-                    lock (Lock)
-                    {
-                        if (_releases == null)
-                        {
-                            const int limit = 1000;
-                            _releases = (List<Release>) Fred.GetSourceReleases(Id);
-                            var count = _releases.Count;
-                            var call = 1;
-                            while (count == limit)
-                            {
-                                var more = (List<Release>) Fred.GetSourceReleases(Id, DateTime.Today, DateTime.Today, limit, call*limit);
-                                _releases.AddRange(more);
-                                count = more.Count;
-                                call++;
-                            }
-                        }
-                    }
-                }
-
-                return _releases;
-            }
-        }
-
-        #region IEnumerable<Release> Members
+        public IEnumerable<Release> Releases => _releases.Value;
 
         public IEnumerator<Release> GetEnumerator()
         {
@@ -101,7 +83,5 @@ namespace Xaye.Fred
         {
             return GetEnumerator();
         }
-
-        #endregion
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Xaye.Fred
 {
@@ -9,13 +8,33 @@ namespace Xaye.Fred
     /// </summary>
     public class Category : Item
     {
-        private volatile IEnumerable<Category> _childern;
-        private volatile Category _parent;
-        private volatile IEnumerable<Category> _related;
-        private volatile List<Series> _series;
+        private readonly Lazy<IEnumerable<Category>> _childern;
+        private readonly Lazy<Category> _parent;
+        private readonly Lazy<IEnumerable<Category>> _related;
+        private readonly Lazy<List<Series>> _series;
 
         internal Category(Fred fred) : base(fred)
         {
+            _childern = new Lazy<IEnumerable<Category>>(() => Fred.GetCategoryChildern(Id));
+            _parent = new Lazy<Category>(() => Id == 0 ? this : Fred.GetCategory(ParentId));
+            _related = new Lazy<IEnumerable<Category>>(() => Fred.GetCategoryRelated(Id));
+            _series = new Lazy<List<Series>>(
+                () =>
+                {
+                    var series = (List<Series>) Fred.GetCategorySeries(Id, DateTime.Today, DateTime.Today);
+                    var count = series?.Count;
+                    var call = 1;
+                    while (count == CallLimit)
+                    {
+                        var more = (List<Series>) Fred.GetCategorySeries(Id, DateTime.Today, DateTime.Today, CallLimit, call* CallLimit);
+                        series.AddRange(more);
+                        count = more.Count;
+                        call++;
+                    }
+                    return series;
+
+                }
+                );
         }
 
         /// <summary>
@@ -38,98 +57,21 @@ namespace Xaye.Fred
         /// This category's parent category. If this
         /// category is the root category, then the Parent == this.
         /// </summary>
-        public Category Parent
-        {
-            get
-            {
-                if (_parent == null)
-                {
-                    lock (Lock)
-                    {
-                        if (_parent == null)
-                        {
-                            _parent = Id == 0 ? this : Fred.GetCategory(ParentId);
-                        }
-                    }
-                }
-                return _parent;
-            }
-        }
+        public Category Parent => _parent.Value;
 
         /// <summary>
         /// Enumeration of the category's children categories. Lazy loaded.
         /// </summary>
-        public IEnumerable<Category> Childern
-        {
-            get
-            {
-                if (_childern == null)
-                {
-                    lock (Lock)
-                    {
-                        if (_childern == null)
-                        {
-                            _childern = Fred.GetCategoryChildern(Id);
-                        }
-                    }
-                }
-
-                return _childern;
-            }
-        }
+        public IEnumerable<Category> Childern => _childern.Value;
 
         /// <summary>
         /// Enumeration of all related categories. Lazy loaded.
         /// </summary>
-        public IEnumerable<Category> Related
-        {
-            get
-            {
-                if (_related == null)
-                {
-                    lock (Lock)
-                    {
-                        if (_related == null)
-                        {
-                            _related = Fred.GetCategoryRelated(Id);
-                        }
-                    }
-                }
-
-                return _related;
-            }
-        }
+        public IEnumerable<Category> Related => _related.Value;
 
         /// <summary>
         /// Enumeration of all series in the category. Lazy loaded.
         /// </summary>
-        public IEnumerable<Series> Series
-        {
-            get
-            {
-                if (_series == null)
-                {
-                    lock (Lock)
-                    {
-                        if (_series == null)
-                        {
-                            const int limit = 1000;
-                            _series = (List<Series>) Fred.GetCategorySeries(Id, DateTime.Today, DateTime.Today, limit, 0);
-                            var count = _series.Count;
-                            var call = 1;
-                            while (count == limit)
-                            {
-                                var more = (List<Series>) Fred.GetCategorySeries(Id, DateTime.Today, DateTime.Today, limit, call*limit);
-                                _series.AddRange(more);
-                                count = more.Count;
-                                call++;
-                            }
-                        }
-                    }
-                }
-
-                return _series;
-            }
-        }
+        public IEnumerable<Series> Series => _series.Value;
     }
 }
