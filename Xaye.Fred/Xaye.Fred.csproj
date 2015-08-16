@@ -48,7 +48,6 @@
     <Compile Include="FredException.cs" />
     <Compile Include="Frequency.cs" />
     <Compile Include="Item.cs" />
-    <Compile Include="IUrlDownloader.cs" />
     <Compile Include="Observation.cs" />
     <Compile Include="OutputType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,7 +63,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="YearStamp.MonthStamp.DayStamp.Increment" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="YearStamp.MonthStamp.DayStamp.Increment" BuildVersion_BuildAction="ReBuild" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

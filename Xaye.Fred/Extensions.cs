@@ -117,7 +117,7 @@ namespace Xaye.Fred
         /// <returns>The converted string.</returns>
         public static string ToString(this Transformation transformation)
         {
-            var ret = String.Empty;
+            var ret = string.Empty;
             switch (transformation)
             {
                     case Transformation.None:
@@ -285,6 +285,9 @@ namespace Xaye.Fred
                     break;
                 case FileType.Xls:
                     ret = "xls";
+                    break;
+                case FileType.Json:
+                    ret = "json";
                     break;
             }
             return ret; 

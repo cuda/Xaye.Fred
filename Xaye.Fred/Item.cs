@@ -15,6 +15,7 @@
         }
 
         protected object Lock { get; } = new object();
+
         internal Fred Fred { get; set; }
 
         /// <summary>

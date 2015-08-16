@@ -16,6 +16,11 @@
         Xml,
 
         /// <summary>
+        /// Json
+        /// </summary>
+        Json,
+
+        /// <summary>
         /// Excel Spreadsheet
         /// </summary>
         Xls
