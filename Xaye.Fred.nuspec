@@ -1,19 +1,32 @@
-<?xml version="1.0"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
-  <metadata>
-    <version>2015.07.26.83</version>
-    <authors>Marcus Cuda</authors>
-    <owners>cuda</owners>
-    <licenseUrl>https://github.com/cuda/Xaye.Fred/blob/master/LICENSE.txt</licenseUrl>
-    <projectUrl>https://github.com/cuda/Xaye.Fred</projectUrl>
-    <id>Xaye.Fred</id>
-    <title>Xaye.Fred</title>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>.NET wrapper around the Federal Reserve Economic Data (FRED) API</description>
-    <releaseNotes>Updated to support FRED's URL change to HTTPS.</releaseNotes>
-    <tags>data economics statistics</tags>
-  </metadata>
-  <files>
-    <file src="Xaye.Fred\bin\Release\Xaye.Fred.dll" target="lib\net40\Xaye.Fred.dll" />
-  </files>
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Xaye.Fred</id>
+        <version>2.0.0-beta2</version>
+        <title>Xaye.Fred</title>
+        <authors>Marcus Cuda</authors>
+        <owners>cuda</owners>
+        <licenseUrl>https://github.com/cuda/Xaye.Fred/blob/master/LICENSE.txt</licenseUrl>
+        <projectUrl>https://github.com/cuda/Xaye.Fred</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>.NET wrapper around the Federal Reserve Economic Data (FRED) API</description>
+        <releaseNotes>Added a portable version of library and moved to Semantic Versioning</releaseNotes>
+        <tags>data economics statistics</tags>
+        <dependencies>
+          <group targetFramework="net40">
+          </group>
+          <group targetFramework="net45">
+          </group>
+          <group targetFramework="net46">
+          </group>
+          <group targetFramework="portable-net45+sl5+netcore45+wpa81+wp8">
+            <dependency id="Microsoft.Net.Http" version="2.2.29" />
+            <dependency id="NodaTime" version="1.3.1" />
+          </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="Xaye.Fred\bin\Release\Xaye.Fred.dll" target="lib\net40\Xaye.Fred.dll" />
+        <file src="Xaye.Fred.Portable\bin\Release\Xaye.Fred.dll" target="lib\portable-net45+sl5+netcore45+wpa81+wp8\Xaye.Fred.dll" />
+    </files>
 </package>

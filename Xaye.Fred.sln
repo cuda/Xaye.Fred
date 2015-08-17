@@ -60,7 +60,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_BuildVersioningStyle = YearStamp.MonthStamp.DayStamp.Increment
 		BuildVersion_BuildAction = ReBuild
+		BuildVersion_BuildVersioningStyle = YearStamp.MonthStamp.DayStamp.Increment
 	EndGlobalSection
 EndGlobal
