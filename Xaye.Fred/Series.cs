@@ -174,21 +174,21 @@ namespace Xaye.Fred
         /// <summary>
         ///   Gets the release the series belongs to. Lazily loaded.
         /// </summary>
-        public Release Release => _release.Value;
+        public Release GetRelease() => _release.Value;
 
         /// <summary>
         ///   Gets the categories the series belongs to. Lazily loaded.
         /// </summary>
         /// <remarks>
         /// </remarks>
-        public IEnumerable<Category> Categories => _categories.Value;
+        public IEnumerable<Category> GetCategories() => _categories.Value;
 
         /// <summary>
         ///   Gets the series observations. Lazily loaded.
         /// </summary>
         /// <remarks>
         /// </remarks>
-        public IEnumerable<Observation> Observations => _data.Value;
+        public IEnumerable<Observation> GetObservations() => _data.Value;
 
         /// <summary>
         ///   Returns an enumerator that iterates through the collection.
@@ -198,7 +198,7 @@ namespace Xaye.Fred
         /// </remarks>
         public IEnumerator<Observation> GetEnumerator()
         {
-            return Observations.GetEnumerator();
+            return GetObservations().GetEnumerator();
         }
 
         /// <summary>

@@ -57,21 +57,21 @@ namespace Xaye.Fred
         /// This category's parent category. If this
         /// category is the root category, then the Parent == this.
         /// </summary>
-        public Category Parent => _parent.Value;
+        public Category GetParent() => _parent.Value;
 
         /// <summary>
-        /// Enumeration of the category's children categories. Lazy loaded.
+        /// Enumeration of the category's children categories.
         /// </summary>
-        public IEnumerable<Category> Childern => _childern.Value;
+        public IEnumerable<Category> GetChildern() => _childern.Value;
 
         /// <summary>
-        /// Enumeration of all related categories. Lazy loaded.
+        /// Enumeration of all related categories.
         /// </summary>
-        public IEnumerable<Category> Related => _related.Value;
+        public IEnumerable<Category> GetRelated() => _related.Value;
 
         /// <summary>
-        /// Enumeration of all series in the category. Lazy loaded.
+        /// Enumeration of all series in the category.
         /// </summary>
-        public IEnumerable<Series> Series => _series.Value;
+        public IEnumerable<Series> GetSeries() => _series.Value;
     }
 }

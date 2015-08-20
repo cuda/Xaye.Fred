@@ -82,6 +82,7 @@
     </Compile>
     <Compile Include="Category.cs" />
     <Compile Include="Fred.cs" />
+    <Compile Include="Fred.Time.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Release.cs" />
     <Compile Include="Series.cs" />

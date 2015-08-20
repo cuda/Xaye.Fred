@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xaye.Fred", "Xaye.Fred\Xaye
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xaye.Fred.Portable", "Xaye.Fred.Portable\Xaye.Fred.Portable.csproj", "{655FAB55-F222-44C5-85C3-1F85D118B602}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xaye.Fred.Async", "Xaye.Fred.Async\Xaye.Fred.Async.csproj", "{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,12 +57,32 @@ Global
 		{655FAB55-F222-44C5-85C3-1F85D118B602}.Release|x64.Build.0 = Release|Any CPU
 		{655FAB55-F222-44C5-85C3-1F85D118B602}.Release|x86.ActiveCfg = Release|Any CPU
 		{655FAB55-F222-44C5-85C3-1F85D118B602}.Release|x86.Build.0 = Release|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Debug|ARM.Build.0 = Debug|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Debug|x64.Build.0 = Debug|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Debug|x86.Build.0 = Debug|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Release|ARM.ActiveCfg = Release|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Release|ARM.Build.0 = Release|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Release|x64.ActiveCfg = Release|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Release|x64.Build.0 = Release|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Release|x86.ActiveCfg = Release|Any CPU
+		{40C4BD04-B350-4661-BAC8-0B5BBF0385B0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_BuildAction = ReBuild
 		BuildVersion_BuildVersioningStyle = YearStamp.MonthStamp.DayStamp.Increment
+		BuildVersion_BuildAction = ReBuild
 	EndGlobalSection
 EndGlobal

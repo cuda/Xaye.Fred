@@ -81,7 +81,7 @@ namespace Xaye.Fred
         /// Provides an enumerator over the
         /// <see cref="Series"/> in the release.
         /// </summary>
-        public IEnumerable<Series> Series => _series.Value;
+        public IEnumerable<Series> GetSeries() => _series.Value;
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -89,7 +89,7 @@ namespace Xaye.Fred
         /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.</returns>
         public IEnumerator<Series> GetEnumerator()
         {
-            return Series.GetEnumerator();
+            return GetSeries().GetEnumerator();
         }
 
         /// <summary>

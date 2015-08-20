@@ -72,11 +72,11 @@ namespace Xaye.Fred
         /// Provides an enumerator over the
         /// <see cref="Release"/> by the source.
         /// </summary>
-        public IEnumerable<Release> Releases => _releases.Value;
+        public IEnumerable<Release> GetReleases() => _releases.Value;
 
         public IEnumerator<Release> GetEnumerator()
         {
-            return Releases.GetEnumerator();
+            return GetReleases().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

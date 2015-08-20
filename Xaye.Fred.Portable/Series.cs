@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Xaye.Fred
 {
@@ -65,30 +66,30 @@ namespace Xaye.Fred
             Regional
         }
 
-        private readonly Lazy<IEnumerable<Category>> _categories;
-        private volatile Lazy<List<Observation>> _data;
-        private volatile Lazy<Release> _release;
+        private readonly Lazy<Task<IEnumerable<Category>>> _categories;
+        private volatile Lazy<Task<List<Observation>>> _data;
+        private volatile Lazy<Task<Release>> _release;
 
         internal Series(Fred fred) : base(fred)
         {
-            _categories = new Lazy<IEnumerable<Category>>(() => UseRealtimeFields
-                ? Fred.GetSeriesCategories(Id, RealtimeStart, RealtimeEnd).Result
-                : Fred.GetSeriesCategories(Id).Result);
+            _categories = new Lazy<Task<IEnumerable<Category>>>(async () => UseRealtimeFields
+                ? await Fred.GetSeriesCategoriesAsync(Id, RealtimeStart, RealtimeEnd)
+                : await Fred.GetSeriesCategoriesAsync(Id));
 
-            _release = new Lazy<Release>(() => UseRealtimeFields
-                ? Fred.GetSeriesRelease(Id, RealtimeStart, RealtimeEnd).Result
-                : Fred.GetSeriesRelease(Id).Result);
+            _release = new Lazy<Task<Release>>(async () => UseRealtimeFields
+                ? await Fred.GetSeriesReleaseAsync(Id, RealtimeStart, RealtimeEnd)
+                : await Fred.GetSeriesReleaseAsync(Id));
 
-            _data = new Lazy<List<Observation>>(
-                () =>
+            _data = new Lazy<Task<List<Observation>>>(
+                async () =>
                 {
                     const int limit = 100000;
                     var data = UseRealtimeFields
                         ? (List<Observation>)
-                            Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, RealtimeStart,
-                                RealtimeEnd, Enumerable.Empty<DateTime>()).Result
+                            await Fred.GetSeriesObservationsAsync(Id, ObservationStart, ObservationEnd, RealtimeStart,
+                                RealtimeEnd, Enumerable.Empty<DateTime>())
                         : (List<Observation>)
-                            Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd).Result;
+                            await Fred.GetSeriesObservationsAsync(Id, ObservationStart, ObservationEnd);
 
                     var count = data.Count;
                     var call = 1;
@@ -98,9 +99,9 @@ namespace Xaye.Fred
                         var end = UseRealtimeFields ? RealtimeEnd : Fred.CstTime();
                         var more =
                             (List<Observation>)
-                                Fred.GetSeriesObservations(Id, ObservationStart, ObservationEnd, start,
+                                await Fred.GetSeriesObservationsAsync(Id, ObservationStart, ObservationEnd, start,
                                     end, Enumerable.Empty<DateTime>(), limit,
-                                    call*limit).Result;
+                                    call * limit);
                         data.AddRange(more);
                         count = more.Count;
                         call++;
@@ -172,23 +173,42 @@ namespace Xaye.Fred
         public int Popularity { get; set; }
 
         /// <summary>
-        ///   Gets the release the series belongs to. Lazily loaded.
+        ///   Gets the release the series belongs to.
         /// </summary>
-        public Release Release => _release.Value;
+        public Release GetRelease() => _release.Value.Result;
 
         /// <summary>
-        ///   Gets the categories the series belongs to. Lazily loaded.
+        ///   Gets the release the series belongs to.
+        /// </summary>
+        public async Task<Release> GetReleaseAsync() => await _release.Value;
+
+        /// <summary>
+        ///   Gets the categories the series belongs to.
         /// </summary>
         /// <remarks>
         /// </remarks>
-        public IEnumerable<Category> Categories => _categories.Value;
+        public IEnumerable<Category> GetCategories() => _categories.Value.Result;
 
         /// <summary>
-        ///   Gets the series observations. Lazily loaded.
+        ///   Gets the categories the series belongs to.
         /// </summary>
         /// <remarks>
         /// </remarks>
-        public IEnumerable<Observation> Observations => _data.Value;
+        public async Task<IEnumerable<Category>> GetCategoriesAsync() => await _categories.Value;
+
+        /// <summary>
+        ///   Gets the series observations.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        public IEnumerable<Observation> GetObservations() => _data.Value.Result;
+
+        /// <summary>
+        ///   Gets the series observations.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        public async Task<IEnumerable<Observation>> GetObservationsAsync() => await _data.Value;
 
         /// <summary>
         ///   Returns an enumerator that iterates through the collection.
@@ -198,7 +218,7 @@ namespace Xaye.Fred
         /// </remarks>
         public IEnumerator<Observation> GetEnumerator()
         {
-            return Observations.GetEnumerator();
+            return GetObservations().GetEnumerator();
         }
 
         /// <summary>

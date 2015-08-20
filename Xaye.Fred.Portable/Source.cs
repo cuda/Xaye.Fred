@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Xaye.Fred
 {
@@ -22,19 +23,19 @@ namespace Xaye.Fred
             RealtimeEnd
         }
 
-        private readonly Lazy<List<Release>> _releases;
+        private readonly Lazy<Task<List<Release>>> _releases;
 
         internal Source(Fred fred) : base(fred)
         {
-            _releases = new Lazy<List<Release>>(
-                () =>
+            _releases = new Lazy<Task<List<Release>>>(
+                async () =>
                 {
-                    var releases = (List<Release>) Fred.GetSourceReleases(Id).Result;
+                    var releases = (List<Release>) await Fred.GetSourceReleasesAsync(Id);
                     var count = releases.Count;
                     var call = 1;
                     while (count == CallLimit)
                     {
-                        var more = (List<Release>) Fred.GetSourceReleases(Id, DateTime.Today, DateTime.Today, CallLimit, call*CallLimit).Result;
+                        var more = (List<Release>) await Fred.GetSourceReleasesAsync(Id, DateTime.Today, DateTime.Today, CallLimit, call * CallLimit);
                         releases.AddRange(more);
                         count = more.Count;
                         call++;
@@ -72,11 +73,17 @@ namespace Xaye.Fred
         /// Provides an enumerator over the
         /// <see cref="Release"/> by the source.
         /// </summary>
-        public IEnumerable<Release> Releases => _releases.Value;
+        public IEnumerable<Release> GetReleases() => _releases.Value.Result;
+
+        /// <summary>
+        /// Provides an enumerator over the
+        /// <see cref="Release"/> by the source.
+        /// </summary>
+        public async Task<IEnumerable<Release>> GetReleasesAsync() => await _releases.Value;
 
         public IEnumerator<Release> GetEnumerator()
         {
-            return Releases.GetEnumerator();
+            return GetReleases().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

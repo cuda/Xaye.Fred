@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Xaye.Fred
 {
@@ -25,19 +26,19 @@ namespace Xaye.Fred
 
         #endregion
 
-        private readonly Lazy<IList<Series>> _series;
+        private readonly Lazy<Task<List<Series>>> _series;
 
         internal Release(Fred fred) : base(fred)
         {
-            _series = new Lazy<IList<Series>>(
-                () =>
+            _series = new Lazy<Task<List<Series>>>(
+                async () =>
                 {
-                    var series = (List<Series>) Fred.GetReleaseSeries(Id, RealtimeStart, RealtimeEnd).Result;
+                    var series = (List<Series>) await Fred.GetReleaseSeriesAsync(Id, RealtimeStart, RealtimeEnd);
                     var count = series.Count;
                     var call = 1;
                     while (count == CallLimit)
                     {
-                        var more = (List<Series>) Fred.GetReleaseSeries(Id, DateTime.Today, DateTime.Today, CallLimit, call* CallLimit).Result;
+                        var more = (List<Series>) await Fred.GetReleaseSeriesAsync(Id, DateTime.Today, DateTime.Today, CallLimit, call * CallLimit);
                         series.AddRange(more);
                         count = more.Count;
                         call++;
@@ -81,7 +82,14 @@ namespace Xaye.Fred
         /// Provides an enumerator over the
         /// <see cref="Series"/> in the release.
         /// </summary>
-        public IEnumerable<Series> Series => _series.Value;
+        public IEnumerable<Series> GetSeries() => _series.Value.Result;
+
+
+        /// <summary>
+        /// Provides an enumerator over the
+        /// <see cref="Series"/> in the release.
+        /// </summary>
+        public async Task<IEnumerable<Series>> GetSeriesAsync() => await _series.Value;
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -89,7 +97,7 @@ namespace Xaye.Fred
         /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.</returns>
         public IEnumerator<Series> GetEnumerator()
         {
-            return Series.GetEnumerator();
+            return GetSeries().GetEnumerator();
         }
 
         /// <summary>

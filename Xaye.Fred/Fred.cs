@@ -674,7 +674,7 @@ namespace Xaye.Fred
             try
             {
                 var extension = GetExtension(filename);
-                if (fileType != FileType.Xml && !extension.Equals(".zip", StringComparison.OrdinalIgnoreCase))
+                if (fileType != FileType.Xml && fileType != FileType.Json && !extension.Equals(".zip", StringComparison.OrdinalIgnoreCase))
                 {
                     filename += ".zip";
                 }
