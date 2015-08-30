@@ -72,16 +72,17 @@ namespace Xaye.Fred
         /// Provides an enumerator over the
         /// <see cref="Release"/> by the source.
         /// </summary>
+        [Obsolete("Please use GetReleases() instead. This property will be removed in the next release.")]
+        public IEnumerable<Release> Releases => GetReleases();
+
+        public IEnumerator<Release> GetEnumerator() => GetReleases().GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        /// Provides an enumerator over the
+        /// <see cref="Release"/> by the source.
+        /// </summary>
         public IEnumerable<Release> GetReleases() => _releases.Value;
-
-        public IEnumerator<Release> GetEnumerator()
-        {
-            return GetReleases().GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
     }
 }

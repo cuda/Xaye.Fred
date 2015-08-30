@@ -27,13 +27,12 @@ namespace Xaye.Fred
                     var call = 1;
                     while (count == CallLimit)
                     {
-                        var more = (List<Series>) await Fred.GetCategorySeriesAsync(Id, DateTime.Today, DateTime.Today, CallLimit, call * CallLimit);
+                        var more = (List<Series>) await Fred.GetCategorySeriesAsync(Id, DateTime.Today, DateTime.Today, CallLimit, call*CallLimit);
                         series.AddRange(more);
                         count = more.Count;
                         call++;
                     }
                     return series;
-
                 }
                 );
         }
@@ -53,6 +52,31 @@ namespace Xaye.Fred
         /// category is the root category, then the ParentId == Id == 0.
         /// </summary>
         public int ParentId { get; set; }
+
+        /// <summary>
+        /// This category's parent category. If this
+        /// category is the root category, then the Parent == this.
+        /// </summary>
+        [Obsolete("Please use GetParent() instead. This property will be removed in the next release.")]
+        public Category Parent => GetParent();
+
+        /// <summary>
+        /// Enumeration of the category's children categories.
+        /// </summary>
+        [Obsolete("Please use GetChildern() instead. This property will be removed in the next release.")]
+        public IEnumerable<Category> Childern => GetChildern();
+
+        /// <summary>
+        /// Enumeration of all related categories.
+        /// </summary>
+        [Obsolete("Please use GetRelated() instead. This property will be removed in the next release.")]
+        public IEnumerable<Category> Related => GetRelated();
+
+        /// <summary>
+        /// Enumeration of all series in the category.
+        /// </summary>
+        [Obsolete("Please use GetSeries() instead. This property will be removed in the next release.")]
+        public IEnumerable<Series> Series => GetSeries();
 
         /// <summary>
         /// This category's parent category. If this

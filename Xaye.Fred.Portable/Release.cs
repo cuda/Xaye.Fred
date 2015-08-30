@@ -38,7 +38,7 @@ namespace Xaye.Fred
                     var call = 1;
                     while (count == CallLimit)
                     {
-                        var more = (List<Series>) await Fred.GetReleaseSeriesAsync(Id, DateTime.Today, DateTime.Today, CallLimit, call * CallLimit);
+                        var more = (List<Series>) await Fred.GetReleaseSeriesAsync(Id, DateTime.Today, DateTime.Today, CallLimit, call*CallLimit);
                         series.AddRange(more);
                         count = more.Count;
                         call++;
@@ -82,31 +82,31 @@ namespace Xaye.Fred
         /// Provides an enumerator over the
         /// <see cref="Series"/> in the release.
         /// </summary>
-        public IEnumerable<Series> GetSeries() => _series.Value.Result;
-
-
-        /// <summary>
-        /// Provides an enumerator over the
-        /// <see cref="Series"/> in the release.
-        /// </summary>
-        public async Task<IEnumerable<Series>> GetSeriesAsync() => await _series.Value;
+        [Obsolete("Please use GetSeries() instead. This property will be removed in the next release.")]
+        public IEnumerable<Series> Series => GetSeries();
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.</returns>
-        public IEnumerator<Series> GetEnumerator()
-        {
-            return GetSeries().GetEnumerator();
-        }
+        public IEnumerator<Series> GetEnumerator() => GetSeries().GetEnumerator();
 
         /// <summary>
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.</returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        /// Provides an enumerator over the
+        /// <see cref="Xaye.Fred.Series"/> in the release.
+        /// </summary>
+        public IEnumerable<Series> GetSeries() => _series.Value.Result;
+
+        /// <summary>
+        /// Provides an enumerator over the
+        /// <see cref="Xaye.Fred.Series"/> in the release.
+        /// </summary>
+        public async Task<IEnumerable<Series>> GetSeriesAsync() => await _series.Value;
     }
 }

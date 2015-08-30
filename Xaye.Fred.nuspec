@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>Xaye.Fred</id>
-        <version>2.0.0-beta2</version>
+        <version>2015.09.01.1-rc</version>
         <title>Xaye.Fred</title>
         <authors>Marcus Cuda</authors>
         <owners>cuda</owners>
@@ -10,7 +10,8 @@
         <projectUrl>https://github.com/cuda/Xaye.Fred</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>.NET wrapper around the Federal Reserve Economic Data (FRED) API</description>
-        <releaseNotes>Added a portable version of library and moved to Semantic Versioning</releaseNotes>
+        <releaseNotes>Added a portable version and added an async interface
+        for the .NET 4.5+ or portable versions of library</releaseNotes>
         <tags>data economics statistics</tags>
         <dependencies>
           <group targetFramework="net40">
@@ -27,6 +28,7 @@
     </metadata>
     <files>
         <file src="Xaye.Fred\bin\Release\Xaye.Fred.dll" target="lib\net40\Xaye.Fred.dll" />
+        <file src="Xaye.Fred.Async\bin\Release\Xaye.Fred.dll" target="lib\net45\Xaye.Fred.dll" />
         <file src="Xaye.Fred.Portable\bin\Release\Xaye.Fred.dll" target="lib\portable-net45+sl5+netcore45+wpa81+wp8\Xaye.Fred.dll" />
     </files>
 </package>

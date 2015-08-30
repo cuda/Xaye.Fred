@@ -172,23 +172,26 @@ namespace Xaye.Fred
         public int Popularity { get; set; }
 
         /// <summary>
-        ///   Gets the release the series belongs to. Lazily loaded.
+        ///   Gets the release the series belongs to.
         /// </summary>
-        public Release GetRelease() => _release.Value;
+        [Obsolete("Please use GetRelease() instead. This property will be removed in the next release.")]
+        public Release Release => GetRelease();
 
         /// <summary>
-        ///   Gets the categories the series belongs to. Lazily loaded.
+        ///   Gets the categories the series belongs to. 
         /// </summary>
         /// <remarks>
         /// </remarks>
-        public IEnumerable<Category> GetCategories() => _categories.Value;
+        [Obsolete("Please use GetCategories() instead. This property will be removed in the next release.")]
+        public IEnumerable<Category> Categories => GetCategories();
 
         /// <summary>
-        ///   Gets the series observations. Lazily loaded.
+        ///   Gets the series observations.
         /// </summary>
         /// <remarks>
         /// </remarks>
-        public IEnumerable<Observation> GetObservations() => _data.Value;
+        [Obsolete("Please use GetObservations() instead. This property will be removed in the next release.")]
+        public IEnumerable<Observation> Observations => GetObservations();
 
         /// <summary>
         ///   Returns an enumerator that iterates through the collection.
@@ -196,10 +199,7 @@ namespace Xaye.Fred
         /// <returns> A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection. </returns>
         /// <remarks>
         /// </remarks>
-        public IEnumerator<Observation> GetEnumerator()
-        {
-            return GetObservations().GetEnumerator();
-        }
+        public IEnumerator<Observation> GetEnumerator() => GetObservations().GetEnumerator();
 
         /// <summary>
         ///   Returns an enumerator that iterates through a collection.
@@ -207,9 +207,25 @@ namespace Xaye.Fred
         /// <returns> An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection. </returns>
         /// <remarks>
         /// </remarks>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        ///   Gets the release the series belongs to. 
+        /// </summary>
+        public Release GetRelease() => _release.Value;
+
+        /// <summary>
+        ///   Gets the categories the series belongs to.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        public IEnumerable<Category> GetCategories() => _categories.Value;
+
+        /// <summary>
+        ///   Gets the series observations.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        public IEnumerable<Observation> GetObservations() => _data.Value;
     }
 }

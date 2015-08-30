@@ -35,7 +35,7 @@ namespace Xaye.Fred
                     var call = 1;
                     while (count == CallLimit)
                     {
-                        var more = (List<Release>) await Fred.GetSourceReleasesAsync(Id, DateTime.Today, DateTime.Today, CallLimit, call * CallLimit);
+                        var more = (List<Release>) await Fred.GetSourceReleasesAsync(Id, DateTime.Today, DateTime.Today, CallLimit, call*CallLimit);
                         releases.AddRange(more);
                         count = more.Count;
                         call++;
@@ -73,6 +73,17 @@ namespace Xaye.Fred
         /// Provides an enumerator over the
         /// <see cref="Release"/> by the source.
         /// </summary>
+        [Obsolete("Please use GetReleases() instead. This property will be removed in the next release.")]
+        public IEnumerable<Release> Releases => GetReleases();
+
+        public IEnumerator<Release> GetEnumerator() => GetReleases().GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        /// Provides an enumerator over the
+        /// <see cref="Release"/> by the source.
+        /// </summary>
         public IEnumerable<Release> GetReleases() => _releases.Value.Result;
 
         /// <summary>
@@ -80,15 +91,5 @@ namespace Xaye.Fred
         /// <see cref="Release"/> by the source.
         /// </summary>
         public async Task<IEnumerable<Release>> GetReleasesAsync() => await _releases.Value;
-
-        public IEnumerator<Release> GetEnumerator()
-        {
-            return GetReleases().GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
     }
 }

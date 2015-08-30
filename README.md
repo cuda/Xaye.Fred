@@ -48,4 +48,4 @@ If caching in enabled, you can clear it at anytime by calling ClearCache().
 ## Notes
 1. Overloaded versions are provided so user's can override FRED's default values. 
 2. Where properties on Release, Category, Source, and Series objects return an enumeration, the enumeration is lazily loaded. That is, a FRED API call is not made until that property is accessed.
-3. .NET 4.5 asynchronous versions of the methods above are available in the project source but not the NuGet package.
+

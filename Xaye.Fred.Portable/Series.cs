@@ -101,7 +101,7 @@ namespace Xaye.Fred
                             (List<Observation>)
                                 await Fred.GetSeriesObservationsAsync(Id, ObservationStart, ObservationEnd, start,
                                     end, Enumerable.Empty<DateTime>(), limit,
-                                    call * limit);
+                                    call*limit);
                         data.AddRange(more);
                         count = more.Count;
                         call++;
@@ -175,6 +175,44 @@ namespace Xaye.Fred
         /// <summary>
         ///   Gets the release the series belongs to.
         /// </summary>
+        [Obsolete("Please use GetRelease() instead. This property will be removed in the next release.")]
+        public Release Release => GetRelease();
+
+        /// <summary>
+        ///   Gets the categories the series belongs to. 
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        [Obsolete("Please use GetCategories() instead. This property will be removed in the next release.")]
+        public IEnumerable<Category> Categories => GetCategories();
+
+        /// <summary>
+        ///   Gets the series observations.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        [Obsolete("Please use GetObservations() instead. This property will be removed in the next release.")]
+        public IEnumerable<Observation> Observations => GetObservations();
+
+        /// <summary>
+        ///   Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns> A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection. </returns>
+        /// <remarks>
+        /// </remarks>
+        public IEnumerator<Observation> GetEnumerator() => GetObservations().GetEnumerator();
+
+        /// <summary>
+        ///   Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns> An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection. </returns>
+        /// <remarks>
+        /// </remarks>
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        ///   Gets the release the series belongs to.
+        /// </summary>
         public Release GetRelease() => _release.Value.Result;
 
         /// <summary>
@@ -209,27 +247,5 @@ namespace Xaye.Fred
         /// <remarks>
         /// </remarks>
         public async Task<IEnumerable<Observation>> GetObservationsAsync() => await _data.Value;
-
-        /// <summary>
-        ///   Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns> A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection. </returns>
-        /// <remarks>
-        /// </remarks>
-        public IEnumerator<Observation> GetEnumerator()
-        {
-            return GetObservations().GetEnumerator();
-        }
-
-        /// <summary>
-        ///   Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns> An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection. </returns>
-        /// <remarks>
-        /// </remarks>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
     }
 }
