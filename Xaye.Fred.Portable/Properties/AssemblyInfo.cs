@@ -8,5 +8,5 @@
 [assembly: AssemblyCopyright("Copyright © 2012-2015 Marcus Cuda")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("2015.09.01.1")]
-[assembly: AssemblyFileVersion("2015.09.01.1")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]
