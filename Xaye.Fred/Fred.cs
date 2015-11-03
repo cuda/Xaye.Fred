@@ -951,10 +951,31 @@ namespace Xaye.Fred
         /// Corresponds to http://api.stlouisfed.org/fred/series/observations
         /// </summary>
         /// <param name="seriesId">The id for a series.</param>
+        /// <param name="limit">The maximum number of results to return. An integer between 1 and 100000, optional, default: 100000</param>
+        /// <param name="offset">non-negative integer, optional, default: 0</param>
+        /// <param name="order">Sort results is ascending or descending observation_date order.</param>
+        /// <param name="transformation">Type of data value transformation.</param>
+        /// <param name="frequency">An optional parameter that indicates a lower frequency to aggregate values to. 
+        /// The FRED frequency aggregation feature converts higher frequency data series into lower frequency data series 
+        /// (e.g. converts a monthly data series into an annual data series). In FRED, the highest frequency data is daily, 
+        /// and the lowest frequency data is annual. There are 3 aggregation methods available- average, sum, and end of period.</param>
+        /// <param name="method">A key that indicates the aggregation method used for frequency aggregation.</param>
+        /// <param name="outputType">Output type:
+        /// 1. Observations by Real-Time Period
+        /// 2. Observations by Vintage Date, All Observations
+        /// 3. Observations by Vintage Date, New and Revised Observations Only
+        /// 4. Observations, Initial Release Only
+        /// </param>
         /// <returns>Observations or data values for an economic data series.</returns>
-        public IEnumerable<Observation> GetSeriesObservations(string seriesId)
+        public IEnumerable<Observation> GetSeriesObservations(string seriesId, int limit = 100000,
+            int offset = 0, SortOrder order = SortOrder.Ascending,
+            Transformation transformation = Transformation.None,
+            Frequency frequency = Frequency.None,
+            AggregationMethod method = AggregationMethod.Average,
+            OutputType outputType = OutputType.RealTime)
         {
-            return GetSeriesObservations(seriesId, new DateTime(1776, 07, 04), new DateTime(9999, 12, 31));
+            var now = CstTime();
+            return GetSeriesObservations(seriesId, new DateTime(1776, 07, 04), new DateTime(9999, 12, 31), now, now, Enumerable.Empty<DateTime>(), limit, offset, order, transformation, frequency, method, outputType);
         }
 
         /// <summary>
