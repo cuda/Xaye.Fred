@@ -240,12 +240,12 @@ namespace Xaye.Fred
 
             var root = await GetRoot(url);
             return (from releaseDate in root.Elements("release_date")
-                    select new ReleaseDate
-                    {
-                        ReleaseId = int.Parse(releaseDate.Attribute("release_id").Value),
-                        ReleaseName = releaseDate.Attribute("release_name").Value,
-                        Date = releaseDate.Value.ToFredDate()
-                    }).ToList();
+                select new ReleaseDate
+                {
+                    ReleaseId = int.Parse(releaseDate.Attribute("release_id").Value),
+                    ReleaseName = releaseDate.Attribute("release_name").Value,
+                    Date = releaseDate.Value.ToFredDate()
+                }).ToList();
         }
 
         /// <summary>
@@ -316,12 +316,12 @@ namespace Xaye.Fred
 
             var root = await GetRoot(url);
             return (from releaseDate in root.Elements("release_date")
-                    select new ReleaseDate
-                    {
-                        ReleaseId = int.Parse(releaseDate.Attribute("release_id").Value),
-                        ReleaseName = "",
-                        Date = releaseDate.Value.ToFredDate()
-                    }).ToList();
+                select new ReleaseDate
+                {
+                    ReleaseId = int.Parse(releaseDate.Attribute("release_id").Value),
+                    ReleaseName = "",
+                    Date = releaseDate.Value.ToFredDate()
+                }).ToList();
         }
 
         /// <summary>
@@ -356,7 +356,7 @@ namespace Xaye.Fred
             Series.FilterBy filter = Series.FilterBy.None,
             string filterValue = "")
         {
-               return GetReleaseSeriesAsync(releaseId, realtimeStart, realtimeEnd, limit, offset, orderBy, order).Result;
+            return GetReleaseSeriesAsync(releaseId, realtimeStart, realtimeEnd, limit, offset, orderBy, order).Result;
         }
 
         /// <summary>
@@ -555,9 +555,6 @@ namespace Xaye.Fred
         /// <returns>The child categories for a specified parent category</returns>
         public IEnumerable<Category> GetCategoryChildern(int categoryId, DateTime realtimeStart, DateTime realtimeEnd)
         {
-            var url = Format(Urls.CategoryChildern, _key, categoryId, realtimeStart.ToFredDateString(),
-                realtimeEnd.ToFredDateString());
-
             return GetCategoryChildernAsync(categoryId, realtimeStart, realtimeEnd).Result;
         }
 
@@ -1066,7 +1063,7 @@ namespace Xaye.Fred
                 Extensions.ToString(order));
             var root = await GetRoot(url);
             return (from date in root.Elements("vintage_date")
-                    select date.Value.ToFredDate()).ToList();
+                select date.Value.ToFredDate()).ToList();
         }
 
         /// <summary>
@@ -1248,6 +1245,87 @@ namespace Xaye.Fred
         }
 
         /// <summary>
+        /// Get the observations or data values for an economic data series. Corresponds to http://api.stlouisfed.org/fred/series/observations
+        /// </summary>
+        /// <param name="seriesId">The id for a series.</param>
+        /// <param name="observationStart">The start of the observation period.</param>
+        /// <param name="observationEnd">The end of the observation period.</param>
+        /// <param name="realtimeStart">The start of the real-time period.</param>
+        /// <param name="realtimeEnd">The end of the real-time period.</param>
+        /// <param name="limit">The maximum number of results to return. An integer between 1 and 100000, optional, default: 100000</param>
+        /// <param name="offset">non-negative integer, optional, default: 0</param>
+        /// <param name="order">Sort results is ascending or descending observation_date order.</param>
+        /// <param name="transformation">Type of data value transformation.</param>
+        /// <param name="frequency">An optional parameter that indicates a lower frequency to aggregate values to. 
+        /// The FRED frequency aggregation feature converts higher frequency data series into lower frequency data series 
+        /// (e.g. converts a monthly data series into an annual data series). In FRED, the highest frequency data is daily, 
+        /// and the lowest frequency data is annual. There are 3 aggregation methods available- average, sum, and end of period.</param>
+        /// <param name="method">A key that indicates the aggregation method used for frequency aggregation.</param>
+        /// <param name="outputType">Output type:
+        /// 1. Observations by Real-Time Period
+        /// 2. Observations by Vintage Date, All Observations
+        /// 3. Observations by Vintage Date, New and Revised Observations Only
+        /// 4.  Observations, Initial Release Only
+        /// </param>
+        /// <returns>Observations or data values for an economic data series.</returns>
+        public IEnumerable<Observation> GetSeriesObservations(string seriesId, DateTime observationStart,
+            DateTime observationEnd, DateTime realtimeStart,
+            DateTime realtimeEnd,
+            int limit = 100000,
+            int offset = 0, SortOrder order = SortOrder.Ascending,
+            Transformation transformation = Transformation.None,
+            Frequency frequency = Frequency.None,
+            AggregationMethod method = AggregationMethod.Average,
+            OutputType outputType = OutputType.RealTime)
+        {
+            return GetSeriesObservationsAsync(seriesId, observationStart, observationEnd, realtimeStart, realtimeEnd, Enumerable.Empty<DateTime>(), limit, offset, order, transformation, frequency, method, outputType).Result;
+        }
+
+        /// <summary>
+        /// Get the observations or data values for an economic data series. Corresponds to http://api.stlouisfed.org/fred/series/observations
+        /// </summary>
+        /// <param name="seriesId">The id for a series.</param>
+        /// <param name="observationStart">The start of the observation period.</param>
+        /// <param name="observationEnd">The end of the observation period.</param>
+        /// <param name="vintageDates">A comma separated string of YYYY-MM-DD formatted dates in history (e.g. 2000-01-01,2005-02-24).
+        ///  Vintage dates are used to download data as it existed on these specified dates in history. Vintage dates can be 
+        ///  specified instead of a real-time period using realtime_start and realtime_end.
+        ///
+        /// Sometimes it may be useful to enter a vintage date that is not a date when the data values were revised. 
+        /// For instance you may want to know the latest available revisions on 2001-09-11 (World Trade Center and 
+        /// Pentagon attacks) or as of a Federal Open Market Committee (FOMC) meeting date. Entering a vintage date is 
+        /// also useful to compare series on different releases with different release dates.</param>
+        /// <param name="limit">The maximum number of results to return. An integer between 1 and 100000, optional, default: 100000</param>
+        /// <param name="offset">non-negative integer, optional, default: 0</param>
+        /// <param name="order">Sort results is ascending or descending observation_date order.</param>
+        /// <param name="transformation">Type of data value transformation.</param>
+        /// <param name="frequency">An optional parameter that indicates a lower frequency to aggregate values to. 
+        /// The FRED frequency aggregation feature converts higher frequency data series into lower frequency data series 
+        /// (e.g. converts a monthly data series into an annual data series). In FRED, the highest frequency data is daily, 
+        /// and the lowest frequency data is annual. There are 3 aggregation methods available- average, sum, and end of period.</param>
+        /// <param name="method">A key that indicates the aggregation method used for frequency aggregation.</param>
+        /// <param name="outputType">Output type:
+        /// 1. Observations by Real-Time Period
+        /// 2. Observations by Vintage Date, All Observations
+        /// 3. Observations by Vintage Date, New and Revised Observations Only
+        /// 4. Observations, Initial Release Only
+        /// </param>
+        /// <returns>Observations or data values for an economic data series.</returns>
+        public IEnumerable<Observation> GetSeriesObservations(string seriesId, DateTime observationStart,
+            DateTime observationEnd,
+            IEnumerable<DateTime> vintageDates,
+            int limit = 100000,
+            int offset = 0, SortOrder order = SortOrder.Ascending,
+            Transformation transformation = Transformation.None,
+            Frequency frequency = Frequency.None,
+            AggregationMethod method = AggregationMethod.Average,
+            OutputType outputType = OutputType.RealTime)
+        {
+            var now = CstTime();
+            return GetSeriesObservationsAsync(seriesId, observationStart, observationEnd, now, now, vintageDates, limit, offset, order, transformation, frequency, method, outputType).Result;
+        }
+
+        /// <summary>
         /// Get the observations or data values for an economic data series using system defaults except for the date range. 
         /// Corresponds to http://api.stlouisfed.org/fred/series/observations
         /// </summary>
@@ -1272,6 +1350,87 @@ namespace Xaye.Fred
         public IEnumerable<Observation> GetSeriesObservations(string seriesId)
         {
             return GetSeriesObservations(seriesId, new DateTime(1776, 07, 04), new DateTime(9999, 12, 31));
+        }
+
+        /// <summary>
+        /// Get the observations or data values for an economic data series. Corresponds to http://api.stlouisfed.org/fred/series/observations
+        /// </summary>
+        /// <param name="seriesId">The id for a series.</param>
+        /// <param name="observationStart">The start of the observation period.</param>
+        /// <param name="observationEnd">The end of the observation period.</param>
+        /// <param name="realtimeStart">The start of the real-time period.</param>
+        /// <param name="realtimeEnd">The end of the real-time period.</param>
+        /// <param name="limit">The maximum number of results to return. An integer between 1 and 100000, optional, default: 100000</param>
+        /// <param name="offset">non-negative integer, optional, default: 0</param>
+        /// <param name="order">Sort results is ascending or descending observation_date order.</param>
+        /// <param name="transformation">Type of data value transformation.</param>
+        /// <param name="frequency">An optional parameter that indicates a lower frequency to aggregate values to. 
+        /// The FRED frequency aggregation feature converts higher frequency data series into lower frequency data series 
+        /// (e.g. converts a monthly data series into an annual data series). In FRED, the highest frequency data is daily, 
+        /// and the lowest frequency data is annual. There are 3 aggregation methods available- average, sum, and end of period.</param>
+        /// <param name="method">A key that indicates the aggregation method used for frequency aggregation.</param>
+        /// <param name="outputType">Output type:
+        /// 1. Observations by Real-Time Period
+        /// 2. Observations by Vintage Date, All Observations
+        /// 3. Observations by Vintage Date, New and Revised Observations Only
+        /// 4. Observations, Initial Release Only
+        /// </param>
+        /// <returns>Observations or data values for an economic data series.</returns>
+        public Task<IEnumerable<Observation>> GetSeriesObservationsAsync(string seriesId, DateTime observationStart,
+            DateTime observationEnd, DateTime realtimeStart,
+            DateTime realtimeEnd,
+            int limit = 100000,
+            int offset = 0, SortOrder order = SortOrder.Ascending,
+            Transformation transformation = Transformation.None,
+            Frequency frequency = Frequency.None,
+            AggregationMethod method = AggregationMethod.Average,
+            OutputType outputType = OutputType.RealTime)
+        {
+            return GetSeriesObservationsAsync(seriesId, observationStart, observationEnd, realtimeStart, realtimeEnd, Enumerable.Empty<DateTime>(), limit, offset, order, transformation, frequency, method, outputType);
+        }
+
+        /// <summary>
+        /// Get the observations or data values for an economic data series. Corresponds to http://api.stlouisfed.org/fred/series/observations
+        /// </summary>
+        /// <param name="seriesId">The id for a series.</param>
+        /// <param name="observationStart">The start of the observation period.</param>
+        /// <param name="observationEnd">The end of the observation period.</param>
+        /// <param name="vintageDates">A comma separated string of YYYY-MM-DD formatted dates in history (e.g. 2000-01-01,2005-02-24).
+        ///  Vintage dates are used to download data as it existed on these specified dates in history. Vintage dates can be 
+        ///  specified instead of a real-time period using realtime_start and realtime_end.
+        ///
+        /// Sometimes it may be useful to enter a vintage date that is not a date when the data values were revised. 
+        /// For instance you may want to know the latest available revisions on 2001-09-11 (World Trade Center and 
+        /// Pentagon attacks) or as of a Federal Open Market Committee (FOMC) meeting date. Entering a vintage date is 
+        /// also useful to compare series on different releases with different release dates.</param>
+        /// <param name="limit">The maximum number of results to return. An integer between 1 and 100000, optional, default: 100000</param>
+        /// <param name="offset">non-negative integer, optional, default: 0</param>
+        /// <param name="order">Sort results is ascending or descending observation_date order.</param>
+        /// <param name="transformation">Type of data value transformation.</param>
+        /// <param name="frequency">An optional parameter that indicates a lower frequency to aggregate values to. 
+        /// The FRED frequency aggregation feature converts higher frequency data series into lower frequency data series 
+        /// (e.g. converts a monthly data series into an annual data series). In FRED, the highest frequency data is daily, 
+        /// and the lowest frequency data is annual. There are 3 aggregation methods available- average, sum, and end of period.</param>
+        /// <param name="method">A key that indicates the aggregation method used for frequency aggregation.</param>
+        /// <param name="outputType">Output type:
+        /// 1. Observations by Real-Time Period
+        /// 2. Observations by Vintage Date, All Observations
+        /// 3. Observations by Vintage Date, New and Revised Observations Only
+        /// 4. Observations, Initial Release Only
+        /// </param>
+        /// <returns>Observations or data values for an economic data series.</returns>
+        public Task<IEnumerable<Observation>> GetSeriesObservationsAsync(string seriesId, DateTime observationStart,
+            DateTime observationEnd,
+            IEnumerable<DateTime> vintageDates,
+            int limit = 100000,
+            int offset = 0, SortOrder order = SortOrder.Ascending,
+            Transformation transformation = Transformation.None,
+            Frequency frequency = Frequency.None,
+            AggregationMethod method = AggregationMethod.Average,
+            OutputType outputType = OutputType.RealTime)
+        {
+            var now = CstTime();
+            return GetSeriesObservationsAsync(seriesId, observationStart, observationEnd, now, now, vintageDates, limit, offset, order, transformation, frequency, method, outputType);
         }
 
         /// <summary>
@@ -1361,30 +1520,38 @@ namespace Xaye.Fred
         }
 
         /// <summary>
-        /// Get the observations or data values for an economic data series using system defaults except for the date range. 
-        /// Corresponds to http://api.stlouisfed.org/fred/series/observations
+        /// Get the observations or data values for an economic data series. Corresponds to http://api.stlouisfed.org/fred/series/observations
         /// </summary>
         /// <param name="seriesId">The id for a series.</param>
         /// <param name="observationStart">The start of the observation period.</param>
         /// <param name="observationEnd">The end of the observation period.</param>
-        /// <returns>Observations or data values for an economic data series.</returns>        
-        public async Task<IEnumerable<Observation>> GetSeriesObservationsAsync(string seriesId, DateTime observationStart,
-            DateTime observationEnd)
+        /// <param name="limit">The maximum number of results to return. An integer between 1 and 100000, optional, default: 100000</param>
+        /// <param name="offset">non-negative integer, optional, default: 0</param>
+        /// <param name="order">Sort results is ascending or descending observation_date order.</param>
+        /// <param name="transformation">Type of data value transformation.</param>
+        /// <param name="frequency">An optional parameter that indicates a lower frequency to aggregate values to. 
+        /// The FRED frequency aggregation feature converts higher frequency data series into lower frequency data series 
+        /// (e.g. converts a monthly data series into an annual data series). In FRED, the highest frequency data is daily, 
+        /// and the lowest frequency data is annual. There are 3 aggregation methods available- average, sum, and end of period.</param>
+        /// <param name="method">A key that indicates the aggregation method used for frequency aggregation.</param>
+        /// <param name="outputType">Output type:
+        /// 1. Observations by Real-Time Period
+        /// 2. Observations by Vintage Date, All Observations
+        /// 3. Observations by Vintage Date, New and Revised Observations Only
+        /// 4. Observations, Initial Release Only
+        /// </param>
+        /// <returns>Observations or data values for an economic data series.</returns>
+        public Task<IEnumerable<Observation>> GetSeriesObservationsAsync(string seriesId, DateTime observationStart,
+            DateTime observationEnd,
+            int limit = 100000,
+            int offset = 0, SortOrder order = SortOrder.Ascending,
+            Transformation transformation = Transformation.None,
+            Frequency frequency = Frequency.None,
+            AggregationMethod method = AggregationMethod.Average,
+            OutputType outputType = OutputType.RealTime)
         {
             var now = CstTime();
-            return await GetSeriesObservationsAsync(seriesId, observationStart, observationEnd, now, now,
-                Enumerable.Empty<DateTime>());
-        }
-
-        /// <summary>
-        /// Get the observations or data values for an economic data series using system defaults. 
-        /// Corresponds to http://api.stlouisfed.org/fred/series/observations
-        /// </summary>
-        /// <param name="seriesId">The id for a series.</param>
-        /// <returns>Observations or data values for an economic data series.</returns>
-        public async Task<IEnumerable<Observation>> GetSeriesObservationsAsync(string seriesId)
-        {
-            return await GetSeriesObservationsAsync(seriesId, new DateTime(1776, 07, 04), new DateTime(9999, 12, 31));
+            return GetSeriesObservationsAsync(seriesId, observationStart, observationEnd, now, now, Enumerable.Empty<DateTime>(), limit, offset, order, transformation, frequency, method, outputType);
         }
 
         /// <summary>
@@ -1470,7 +1637,7 @@ namespace Xaye.Fred
             var now = CstTime();
             return await GetSourceAsync(sourceId, now, now);
         }
-     
+
         /// <summary>
         /// Get the releases for a source. Corresponds to http://api.stlouisfed.org/fred/source/releases
         /// </summary>
